@@ -51,7 +51,12 @@ module.exports = function(app) {
 	});
 
 	// application -------------------------------------------------------------
+<<<<<<< HEAD
+	app.get('/', function(req, res) {
+		res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+=======
 	app.get('*', function(req, res) {
 		res.render('index');
+>>>>>>> 289bff51bc59d4e7e006fb0f6ea83cbc39de0945
 	});
 };
