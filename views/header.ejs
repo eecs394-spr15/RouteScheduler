@@ -1,32 +1,42 @@
 <!doctype html>
 
-<!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="scotchTodo">
+  <!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="ScheduleOptimizer">
 <head>
   <!-- META -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <title>Node/Angular Todo App</title>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-  <!-- SCROLLS -->
+  <link rel="icon" href="../../favicon.ico">
+
+  <title>Schedule Optimizer</title>
+
+
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-  <style>
-    html          { overflow-y:scroll; }
-    body          { padding-top:50px; }
-    #todo-list        { margin-bottom:30px; }
-    #todo-form        { margin-bottom:50px; }
-  </style>
 
   <!-- SPELLS -->
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script><!-- load angular -->
 
+  <style>
+    html          { overflow-y:scroll; }
+
+  </style>
+
+  <link href="styles/index.css" rel="stylesheet">
   <script src="js/controllers/main.js"></script> <!-- load up our controller -->
   <script src="js/services/todos.js"></script> <!-- load our todo service -->
   <script src="js/core.js"></script> <!-- load our main application -->
 
 </head>
+
+
+
+
+
 <!-- SET THE CONTROLLER -->
 <body style='padding-top: 70px;'>
   <nav class="navbar navbar-default navbar-fixed-top">
@@ -39,7 +49,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Brand</a>
+        <a class="navbar-brand" href="#">Optimizer</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -81,4 +91,6 @@
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
+
+
   </nav>
