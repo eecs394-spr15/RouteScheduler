@@ -14,8 +14,7 @@ module.exports = function(app) {
   });
 
  	
-	app.post('/api/todos', function(req, res) {
-
+	app.post('/api/employees', function(req, res) {
 		Employee.create({
 			name : req.body.name,
 			address : req.body.address,
