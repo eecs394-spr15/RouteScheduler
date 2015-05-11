@@ -1,1 +1,1 @@
-angular.module('scotchTodo', ['todoController', 'todoService']);
+angular.module('RouteOptimizer', ['employeeController', 'employeeService']);
