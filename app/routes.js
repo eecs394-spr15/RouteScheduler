@@ -1,4 +1,5 @@
 var Employee = require('./models/employee');
+var Appointment = require('./models/appointment');
 
 module.exports = function(app) {
 
@@ -25,6 +26,42 @@ module.exports = function(app) {
 		});
 
 	});
+
+	app.get('/api/salesperson-algorithm', function(req, res) {
+		// get stuff from database
+		var addresses = [
+			{
+			    "_id": {
+			        "$oid": "555236d3e4b03aad95c1d21f"
+			    },
+			    "name": "Moshe Mcfarland",
+			    "address": "1020 E Nichols RdUnit 4, Palatine, IL, 60074",
+			    "type": "customer"
+			},
+
+			{
+				"_id": {
+			        "$oid": "555236d3e4b03aad95c1d21f"
+			    },
+			    "name": "Moshe Mcfarland",
+			    "address": "1020 E Nichols RdUnit 4, Palatine, IL, 60074",
+			    "type": "customer"
+			},
+
+			{
+					"_id": {
+			        "$oid": "555236d3e4b03aad95c1d21f"
+			    },
+			    "name": "Moshe Mcfarland",
+			    "address": "1020 E Nichols RdUnit 4, Palatine, IL, 60074",
+			    "type": "customer"
+			}
+		]
+
+		// run algorithm
+
+		// return json blob of routes
+	})
 
 	/*
 	// delete a todo

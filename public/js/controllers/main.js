@@ -24,8 +24,18 @@ angular.module('RouteOptimizer', [])
 			$window.location.assign("/");
 
 		}
-		
-		// GET =====================================================================
-		// when landing on the page, get all todos and show them
-		// use the service to get all the todos
+	})
+
+	.controller('algorithmController', function($scope, $window) {
+			console.log("hello!");
+
+			$scope.test = function() {
+				console.log("hello again");
+				var zero = $scope.otherfunc();
+				console.log(zero);
+			}
+
+			$scope.otherfunc = function() {
+				return 0;
+			}
 	});

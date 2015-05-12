@@ -6,7 +6,7 @@
 
 <script lang="javascript" src="dist/xlsx.core.min.js"></script>
 
-  <div class="container-fluid">
+  <div class="container-fluid" ng-controller="algorithmController">
       <div class="row">
         
         <div class="col-sm-3 col-md-2 sidebar">
@@ -34,7 +34,7 @@
               <a href="/upload" class="btn btn-success btn-lg" role="button">Upload Appointments</a>
             </div>
             <div class="col-xs-6 col-sm-6 placeholder">
-              <a href="/results" class="btn btn-primary btn-lg" role="button">Optimize Schedules</a>
+              <a class="btn btn-primary btn-lg" role="button" ng-click="test()">Optimize Schedules</a>
             </div>
           </div>
 
