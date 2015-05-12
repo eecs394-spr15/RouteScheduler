@@ -13,17 +13,17 @@ angular.module('RouteOptimizer', [])
 		};
 	}])
 	// inject the Todo service factory into our controller
-	.controller('employeeController', function($scope, EmployeesService) {
-		
-		EmployeesService.create({
-			name: 'John Smith',
-			address: '123 Blah St',
-			type: 'Technician'
-		});
-		
-		console.log("bleh");
-		$scope.formData = {};
-		$scope.loading = true;
+	.controller('addEmployeeController', function($scope, $window, EmployeesService) {
+		$scope.create = function(employee) {
+			EmployeesService.create({
+				name: employee.name,
+				address: employee.address,
+				type: employee.type
+			});
+			alert("Employee successfully added. Redirecting to main page.");
+			$window.location.assign("/");
+
+		}
 		
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
