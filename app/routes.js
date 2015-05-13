@@ -4,7 +4,7 @@ module.exports = function(app) {
 
 	// api
  	app.get('/api/employees', function(req, res) {
-    Employee.find(function(err, data) {
+    Employee.find({}, function(err, data) {
 
     	if (err)
       	res.send(err);
@@ -12,7 +12,6 @@ module.exports = function(app) {
       res.json(data);
     });
   });
-
  	
 	app.post('/api/employees', function(req, res) {
 		Employee.create({

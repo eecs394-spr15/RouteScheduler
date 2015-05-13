@@ -24,6 +24,16 @@ angular.module('RouteOptimizer', [])
 			$window.location.assign("/");
 
 		}
+
+		$scope.test = function() {
+			EmployeesService.get().
+  			success(function(data, status, headers, config) {
+			    console.log(data);
+			  }).
+			  error(function(data, status, headers, config) {
+			    console.log("an error occurred fetching employees")
+			  });
+		}
 		
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
