@@ -1,5 +1,5 @@
-angular.module('RouteOptimizer', [])
-	.service('EmployeesService', ['$http',function($http) {
+var RouteOpt = angular.module('RouteOptimizer', []);
+RouteOpt.service('EmployeesService', ['$http',function($http) {
 		this.get = function() {
 			return $http.get('/api/employees');
 		};
@@ -13,7 +13,7 @@ angular.module('RouteOptimizer', [])
 		};
 	}])
 	// inject the Todo service factory into our controller
-	.controller('employeeController', function($scope, EmployeesService) {
+RouteOpt.controller('employeeController', function($scope, EmployeesService) {
 		
 		EmployeesService.create({
 			name: 'John Smith',
@@ -28,4 +28,34 @@ angular.module('RouteOptimizer', [])
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
 		// use the service to get all the todos
+
 	});
+
+RouteOpt.controller('uploadController', function($scope) {		
+		$scope.uploadFile = "lsls";
+		$scope.getFile = function() {
+			$scope.fileName = $scope.fileName;
+		};
+		
+	});
+
+RouteOpt.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
+/*var updateFileName = function(evt) {
+		console.log("change registered");
+		console.log("file name: ", document.getElementById("fileN").files[0].name);
+};*/
