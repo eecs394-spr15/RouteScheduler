@@ -6,7 +6,6 @@ module.exports = function(app) {
 	// api
  	app.get('/api/employees', function(req, res) {
 	    Employee.find(function(err, data) {
-
 	    	if (err)
 	      	res.send(err);
 
@@ -14,15 +13,15 @@ module.exports = function(app) {
 	    });
   	});
 
-	app.get('/api/appointments', function(req, res) {
-	    Appointment.find(function(err, data) {
+ 	app.get('/api/appointments', function(req, res) {
+    Appointment.find(function(err, data) {
 
-	    	if (err)
-	      	res.send(err);
+    	if (err)
+      		res.send(err);
 
-	      res.json(data);
-	    });
-	  });
+      	res.json(data);
+    	});
+  	});
  	
 	app.post('/api/employees', function(req, res) {
 		Employee.create({
@@ -36,7 +35,7 @@ module.exports = function(app) {
 
 	});
 
-	app.get('/api/salesperson-algorithm', function(req, res) {
+	app.get('/api/salespersons', function(req, res) {
 		// get stuff from database
 		var addresses = [
 			{
