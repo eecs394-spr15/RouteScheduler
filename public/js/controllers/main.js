@@ -42,15 +42,15 @@ angular.module('RouteOptimizer', [])
 
 	.controller('DisplayEmployeeController', function($scope, $window, EmployeesService) {
 
-		$scope.view = function() {
-			EmployeesService.get().
-  			success(function(data, status, headers, config) {
-  				return data;
-			}).
-			error(function(data, status, headers, config) {
-			    console.log("an error occurred fetching employees")
-			});
-		}
+		
+		EmployeesService.get().
+			success(function(data, status, headers, config) {
+				$scope.view = data;
+		}).
+		error(function(data, status, headers, config) {
+		    console.log("an error occurred fetching employees")
+		});
+	
 		
 		$scope.test = function() {
 			EmployeesService.get().
