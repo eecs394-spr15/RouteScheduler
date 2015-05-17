@@ -1,0 +1,51 @@
+<% include header %>
+
+<div ng-controller='DisplayEmployeeController'>
+
+  <div class="container">
+    <h1> Employee </h1>
+
+    <ul class="list-group">
+      <li class="list-group-item" ng-repeat="stuff in view()">
+        <b>{{stuff.Type}}</b>
+        <div class="text-muted">{{stuff.Team}}</div>
+      </li>
+    </ul>
+
+    <button ng-click="test()">test</button>
+
+    <!--
+    <table class="table table-striped">
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Type</th>
+      </tr>
+      <tr>
+        <td ng-repeat="stuff in view()">{{stuff}}</td>
+        <td>John Smith</td>
+        <td>1234 Michigan Ave</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Bob Smith</td>
+        <td>56 Michigan Ave</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>John Doe</td>
+        <td>78 Michigan Ave</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Sally Sue</td>
+        <td>90 Michigan Ave</td>
+      </tr>
+    </table>
+    -->
+    
+  </div>
+
+</div>
+
+<% include footer %>
