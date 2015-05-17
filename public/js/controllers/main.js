@@ -13,18 +13,57 @@ RouteOpt.service('EmployeesService', ['$http',function($http) {
 		};
 	}])
 	// inject the Todo service factory into our controller
-RouteOpt.controller('employeeController', function($scope, EmployeesService) {
+
+RouteOpt.controller('employeeController', function($scope, $window, EmployeesService) {		
 		
-		EmployeesService.create({
-			name: 'John Smith',
-			address: '123 Blah St',
-			type: 'Technician'
-		});
+		$scope.create = function(employee) {
+			EmployeesService.create({
+				name: employee.name,
+				address: employee.address,
+				type: employee.type
+			});
+			alert("Employee successfully added. Redirecting to main page.");
+			$window.location.assign("/");
+
+		}
+
+		$scope.test = function() {
+			EmployeesService.get().
+  			success(function(data, status, headers, config) {
+			    console.log(data);
+			  }).
+			  error(function(data, status, headers, config) {
+			    console.log("an error occurred fetching employees")
+			  });
+		}
+
 		
-		console.log("bleh");
-		$scope.formData = {};
-		$scope.loading = true;
+		// GET =====================================================================
+		// when landing on the page, get all todos and show them
+		// use the service to get all the todos
+	})
+
+	.controller('DisplayEmployeeController', function($scope, $window, EmployeesService) {
+
+		$scope.view = function() {
+			EmployeesService.get().
+  			success(function(data, status, headers, config) {
+  				return data;
+			}).
+			error(function(data, status, headers, config) {
+			    console.log("an error occurred fetching employees")
+			});
+		}
 		
+		$scope.test = function() {
+			EmployeesService.get().
+  			success(function(data, status, headers, config) {
+			    console.log(data);
+			}).
+			error(function(data, status, headers, config) {
+			    console.log("an error occurred fetching employees")
+			});
+		}
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
 		// use the service to get all the todos
@@ -73,3 +112,4 @@ RouteOpt.directive('fileModel', ['$parse', function ($parse) {
 		console.log("change registered");
 		console.log("file name: ", document.getElementById("fileN").files[0].name);
 };*/
+

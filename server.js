@@ -8,9 +8,8 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var engine = require('ejs-locals');
 
-var mongoUri = process.env.MONGOLAB_URI || 
-  process.env.MONGOHQ_URL || 
-  'mongodb://localhost/mydb'; 
+var mongoUri = process.env.MONGOLAB_URI ||
+  'mongodb://localhost/mydb';
 
 // configuration ===============================================================
 mongoose.connect(mongoUri, function (err, res) {
