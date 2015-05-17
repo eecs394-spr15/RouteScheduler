@@ -38,4 +38,30 @@ angular.module('RouteOptimizer', [])
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
 		// use the service to get all the todos
+	})
+
+	.controller('DisplayEmployeeController', function($scope, $window, EmployeesService) {
+
+		$scope.view = function() {
+			EmployeesService.get().
+  			success(function(data, status, headers, config) {
+  				return data;
+			}).
+			error(function(data, status, headers, config) {
+			    console.log("an error occurred fetching employees")
+			});
+		}
+		
+		$scope.test = function() {
+			EmployeesService.get().
+  			success(function(data, status, headers, config) {
+			    console.log(data);
+			}).
+			error(function(data, status, headers, config) {
+			    console.log("an error occurred fetching employees")
+			});
+		}
+		// GET =====================================================================
+		// when landing on the page, get all todos and show them
+		// use the service to get all the todos
 	});
