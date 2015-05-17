@@ -6,7 +6,14 @@
 	</div>
 	<form class="form-inline" id="uploadForm">			
 		<input type="file" class="file-input " id = "fileN" file-model="uploadFile">
-		<button type="submit" class="btn upload-button" >Upload</button>
-	</form>	
+		<label  class = "first-radio">
+			<input type="radio" ng-model= "fileType" value="sales" checked>Sales Appointments	
+		</label>
+		<label>
+			<input type="radio"  ng-model="fileType" value="technician">Technician Appointments
+		</label>
+		<br>
+		<button type="submit" class="btn upload-button" ng-click = "csvJSON()">Upload</button>
+	</form>		
 </div>
 <% include footer %>

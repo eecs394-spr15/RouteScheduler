@@ -32,11 +32,25 @@ RouteOpt.controller('employeeController', function($scope, EmployeesService) {
 	});
 
 RouteOpt.controller('uploadController', function($scope) {		
-		$scope.uploadFile = "lsls";
-		$scope.getFile = function() {
-			$scope.fileName = $scope.fileName;
-		};
+		$scope.uploadFile = "";
 		
+		$scope.fileType = "sales";
+
+		$scope.csvJSON = function(csv){ 
+		  
+			var reader = new FileReader();
+
+			reader.onload = function(evt) {
+				console.log("parse started");
+			  
+			  console.log("funished parsing");			  
+			  
+			}
+
+			reader.readAsText($scope.uploadFile);
+
+		}
+			
 	});
 
 RouteOpt.directive('fileModel', ['$parse', function ($parse) {
