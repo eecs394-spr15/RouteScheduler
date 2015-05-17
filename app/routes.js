@@ -5,15 +5,24 @@ module.exports = function(app) {
 
 	// api
  	app.get('/api/employees', function(req, res) {
-    Employee.find(function(err, data) {
+	    Employee.find(function(err, data) {
 
-    	if (err)
-      	res.send(err);
+	    	if (err)
+	      	res.send(err);
 
-      res.json(data);
-    });
-  });
+	      res.json(data);
+	    });
+  	});
 
+	app.get('/api/appointments', function(req, res) {
+	    Appointment.find(function(err, data) {
+
+	    	if (err)
+	      	res.send(err);
+
+	      res.json(data);
+	    });
+	  });
  	
 	app.post('/api/employees', function(req, res) {
 		Employee.create({
