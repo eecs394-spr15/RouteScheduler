@@ -3,8 +3,8 @@ var mongoose = require('mongoose');
 var appointmentSchema = new mongoose.Schema({
   name: { type: String},
   address: {type: String},
-  type: { type: String },
+  type: { type: Number},
   time: { type: Date }
 });
-
-module.exports = mongoose.model('Appointment', appointmentSchema);
+//se.model('Appointment'
+//module.exports = mongoo, appointmentSchema);
