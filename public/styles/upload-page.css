@@ -27,6 +27,12 @@ input {
   top: .4em;
 }
 
+.first-radio {
+  margin-right: 1em;
+  margin-top:1.5em;
+  margin-bottom:1.5em;
+}
+
 .file-input::-webkit-file-upload-button {
 	display: inline-block;
   padding: 6px 12px;
