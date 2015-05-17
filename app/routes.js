@@ -53,7 +53,11 @@ module.exports = function(app) {
 	app.get('/manage', function(req, res) {
 		res.render('addemployee');
 	});
-	app.get('/view', function(req, res) {
-	res.render('view');
+	app.get('/appointments', function(req, res) {
+		res.render('appointments');
 	});
+	app.get('/employees', function(req, res) {
+		res.render('employees');
+	});
+	
 };
