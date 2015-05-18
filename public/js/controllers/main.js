@@ -35,22 +35,14 @@ angular.module('RouteOptimizer', [])
 	})
 
 	.controller('algorithmController', function($scope, $window, EmployeesService) {
-<<<<<<< HEAD
-			
-=======
+
 			console.log("hello!");
 			var geocoder = new google.maps.Geocoder();
 			var Locations = [];
->>>>>>> 6f143edd6140100ed01cf8bae8a491fbe0421033
 
 			$scope.test = function() {
 				console.log("hello again");
-/*'''
-				EmployeesService.getAppointments().
-				success(function(data, status, headers, config) {
-					$scope.appointments = data;
-				}
-				'''*/
+
 				var salesNumber=6;
 				var homeAddresses=[[41.87355847,-87.79641662],[41.98512347,-87.65592603],[ 41.75050329,-87.69003923],[41.74313511, -87.64126162][41.98124939,-87.61216696],[41.77933782,-87.77089982]];
 				var appointments=[[[ 41.95304104, -87.66079453 ],[41.90056597,-87.4538938],[41.85340177, -87.51506404],[41.81984669,-87.52693874],[ 41.95472842,-87.7796233],[41.97387503,-87.58250468]],
@@ -124,6 +116,7 @@ angular.module('RouteOptimizer', [])
 			/*'''	var zero = $scope.otherfunc();
 				console.log(zero);'''*/
 			}
+
 			$scope.calculateDistance = function(origin, dest) {
 				lat1=origin[0];
 				lat2=dest[0];
@@ -144,9 +137,6 @@ angular.module('RouteOptimizer', [])
 				return d;
 			}
 
-<<<<<<< HEAD
-			
-=======
 			$scope.codeAddress = function(address) {
 				console.log("Calling geocoder...");
 				geocoder.geocode({ 'address': address}, function(results, status){
@@ -175,6 +165,5 @@ angular.module('RouteOptimizer', [])
 					});
 			}
 
-			$scope.codeAppointmentsByType("customer");
->>>>>>> 6f143edd6140100ed01cf8bae8a491fbe0421033
+			//$scope.codeAppointmentsByType("customer");
 	});
