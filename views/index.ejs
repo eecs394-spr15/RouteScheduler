@@ -6,7 +6,7 @@
 
 <script lang="javascript" src="dist/xlsx.core.min.js"></script>
 
-  <div class="container-fluid" ng-controller="DisplayEmployeeController">
+  <div class="container-fluid" ng-controller="employeeController">
       <div class="row">
         
         <div class="col-sm-3 col-md-2 sidebar">
@@ -48,7 +48,7 @@
               </thead>
               <tbody>
                 <tr ng-repeat="appt in appointments">
-                  <td ng-repeat="(key, value) in appt">{{value}}</td>                  
+                  <td ng-repeat="h in headers">{{appt[h]}}</td>                  
                 </tr>                
               </tbody>
             </table>
