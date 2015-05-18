@@ -31,6 +31,7 @@ angular.module('RouteOptimizer', [])
 	})
 
 	.controller('algorithmController', function($scope, $window, EmployeesService) {
+			
 
 			$scope.test = function() {
 				console.log("hello again");
@@ -40,9 +41,61 @@ angular.module('RouteOptimizer', [])
 					$scope.appointments = data;
 				}
 				'''*/
-				var salesMan=[1,2,3,4,5,6];
-				var distanceMatrix=[[5,2,5,7,8,9],[9,1000,5,3,2,9],[6,1000,7,6,1000,4],[3,1000,3,9,1000,1000],[1000,1000,4,7,1000,1000],[1000,1000,1000,3,1000,1000]];
-				var route=[0,0,0,0,0,0];
+				var salesNumber=6;
+				var homeAddresses=[[41.87355847,-87.79641662],[41.98512347,-87.65592603],[ 41.75050329,-87.69003923],[41.74313511, -87.64126162][41.98124939,-87.61216696],[41.77933782,-87.77089982]];
+				var appointments=[[[ 41.95304104, -87.66079453 ],[41.90056597,-87.4538938],[41.85340177, -87.51506404],[41.81984669,-87.52693874],[ 41.95472842,-87.7796233],[41.97387503,-87.58250468]],
+				[[ 41.80242171,-87.47432295],[41.87915987,-87.61111856],[41.8855845,-87.55396771],[41.94003661,-87.45577421],[41.78695588,-87.67820154],[41.86954838,-87.65298139]],
+				[[41.77982066,-87.66223627],[41.89893941, -87.61800847],[41.82592984,-87.76200356],[41.98791955,-87.5361794],[41.81677539,-87.64333341],[41.9154257,-87.69469442]]];
+				var salesmanLocation=new Array(6);
+				var routes=new Array(6);
+				var DistanceForSales=[0,0,0,0,0,0];//just store it, may show on the page?
+				var visited;
+				var officeAddress=[41.86928379,-87.5629177];
+
+				for(var i=0;i<salesNumber;i++)
+				{
+					routes[i]=new Array();
+					routes[i].push(homeAddresses[i]);
+					salesmanLocation[i]=homeAddresses[i];//end point
+				}
+
+				for(var j=2;j>=0;j++)//backwards
+				{
+					//for each time slot
+					visited=[0,0,0,0,0,0]
+					for(var k=0;k<salesNumber;k++){
+						//for each salesman
+						var origin=salesmanLocation[k];//from last point
+						var minDistance=1000000;
+						var bestDest;
+						
+						for(var h=0;h<salesNumber;h++){
+							//for each appointment
+							dest=appointments[j][h];
+
+							distance=$scope.calculateDistance(origin,dest);
+							if (distance<minDistance && !visited[h])
+							{
+								minDistance=distance;
+								bestDest=h;
+
+							}
+						}
+						routes[j].push(appointments[j][bestDest]);
+						visited[bestDest]=1;
+						DistanceForSales[k]+=minDistance;
+
+							
+					}
+					for(var s=0;s<salesNumber;s++)
+					{
+						DistanceForSales+=$scope.calculateDistance(salesmanLocation[s],officeAddress);
+					}
+						
+				}
+				console.log(routes)
+/*
+				for (var k= salesMan.length-1;k>=0;k--)
 				var minimum=1000;
 				var minsales=0;
 				
@@ -61,8 +114,25 @@ angular.module('RouteOptimizer', [])
 			/*'''	var zero = $scope.otherfunc();
 				console.log(zero);'''*/
 			}
+			$scope.calculateDistance = function(origin, dest) {
+				lat1=origin[0];
+				lat2=dest[0];
+				lon1=origin[1];
+				lon2=dest[1];
+				var R = 6371000; // metres
+				var φ1 = lat1*Math.PI/180;
+				var φ2 = lat2*Math.PI/180;
+				var Δφ = (lat2-lat1)*Math.PI/180;
+				var Δλ = (lon2-lon1)*Math.PI/180;
 
-			$scope.otherfunc = function() {
-				return 0;
+				var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+				        Math.cos(φ1) * Math.cos(φ2) *
+				        Math.sin(Δλ/2) * Math.sin(Δλ/2);
+				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+				var d = R * c;
+				return d;
 			}
+
+			
 	});
