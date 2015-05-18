@@ -62,7 +62,37 @@ RouteOpt.controller('DisplayEmployeeController', function($scope, $window, Emplo
 			});
 		};
 		
-		$scope.appointments = [
+		
+	  
+	});
+
+RouteOpt.controller('uploadController', function($scope, $rootScope) {		
+		$scope.uploadFile = "";
+		
+		$scope.fileType = "sales";
+
+		$scope.csvJSON = function(csv){ 
+		  
+			var reader = new FileReader();
+
+			reader.onload = function(evt) {
+				console.log("parse started");
+
+			  $rootScope.noAppts = false;
+
+			  console.log("funished parsing");  
+			 			 	
+			}
+
+			reader.readAsText($scope.uploadFile);
+
+		}
+
+			
+	});
+
+RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope) {
+	$scope.appointments = [
 		  {
 		    "Appt. Id":764563,
 		    "Start Time":"6:30:00 PM",
@@ -256,36 +286,13 @@ RouteOpt.controller('DisplayEmployeeController', function($scope, $window, Emplo
 		    "Job Site":"1248 S 19th Ave, Maywood, IL, 60153"
 		  }];
 
-	  $scope.headers = ["Appt. Id", "Start Time", "End Time", "Opportunity #", "Customer Name", "Job Site"];
-
-	  function getHeaders (appt) {
-	  	for (var i = 0; i < appt.length; i++) {
-	  		Things[i]
-	  	};
-	  };
-	});
-
-RouteOpt.controller('uploadController', function($scope) {		
-		$scope.uploadFile = "";
-		
-		$scope.fileType = "sales";
-
-		$scope.csvJSON = function(csv){ 
-		  
-			var reader = new FileReader();
-
-			reader.onload = function(evt) {
-				console.log("parse started");
-			  
-			  console.log("funished parsing");			  
-			  
-			}
-
-			reader.readAsText($scope.uploadFile);
-
-		}
-			
-	});
+	$scope.headers = ["Appt. Id", "Start Time", "End Time", "Opportunity #", "Customer Name", "Job Site"];
+	$scope.noAppts = function() {
+		//update later once appointments come from backend
+		return false;
+	};
+	
+});
 
 RouteOpt.directive('fileModel', ['$parse', function ($parse) {
     return {
