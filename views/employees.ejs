@@ -3,7 +3,11 @@
 <div ng-controller='DisplayEmployeeController'>
 
   <div class="container">
-    <h1> Employee </h1>
+    <h1> Employees </h1>
+
+    <form action="/manage">
+        <input type="submit" value="Add Employee">
+    </form>
 
     <ul class="list-group">
       <li class="list-group-item" ng-repeat="stuff in view">
