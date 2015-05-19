@@ -280,7 +280,36 @@ RouteOpt.controller('uploadController', function($scope) {
 			reader.onload = function(evt) {
 				console.log("parse started");
 			  
-			  console.log("funished parsing");			  
+			  var csv = this.result;
+			  //console.log(csv);
+			  var lines = csv.split("\n");
+ 
+			  var result = [];
+			 
+			  var headers = lines[0].match(/(?:[^,"\r]+|"[^"]*")+/g);
+				
+						 	
+
+			  for(var i=1;i<lines.length;i++){
+			 
+				  var obj = {};
+				  
+				  var currentline=lines[i].match(/(?:[^,"\r]+|"[^"]*")+/g);				
+			 
+				  if(currentline != null) {
+					  for(var j=0;j<headers.length;j++){
+						  obj[headers[j]] = currentline[j];
+					  }					
+			 
+				  	result.push(obj);
+				  }
+			 
+			  }
+			  
+			  //return result; //JavaScript object
+			  console.log(JSON.stringify(result)); //JSON
+
+			  console.log("finished parsing");			  
 			  
 			}
 
