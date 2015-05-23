@@ -128,7 +128,7 @@ angular.module('RouteOptimizer', [])
 				*/
 			}
 
-			$scope.getRad = function(d){
+			getRad = function(d){
 				return d*PI/180.0;
 			}
 
@@ -159,6 +159,8 @@ angular.module('RouteOptimizer', [])
 						console.log("Error occurred fetching appointments: " + status);
 					});
 			}
-
+			var A=[41.87355847,-87.79641662];
+			var B=[41.98512347,-87.65592603];
+			//console.log($scope.calculateDistance(A,B));
 			//$scope.codeAppointmentsByType("customer");
 	});
