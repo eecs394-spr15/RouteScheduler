@@ -9,6 +9,12 @@ angular.module('ApptsService', [])
 			},
 			addSales : function(data) {
 				return $http.post('/api/salesAppts', data);
+			},
+			getTech : function() {
+				return $http.get('/api/techAppts');
+			},
+			addTech : function(data) {
+				return $http.post('/api/techAppts', data);
 			}
 		}
 	}]);
