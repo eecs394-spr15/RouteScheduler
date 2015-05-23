@@ -55,21 +55,21 @@ module.exports = function(app) {
 		// I am using a full distance matrix because im pretty sure thats how a real non-greedy algorithm would work.
 		// and I don't care if it is more inefficient
 
-		var n = 3;
-		var m = n * 3;
-		var nTotal = n + m + 1; // +1 for the office location
+		var nSalespeople = 3;
+		var nAppointments = nSalespeople * 3;
+		var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
 
 		// initialize stuff needed for algorithm
 		// office is node 0
 		// saleperson homes are nodes 1 -> n + 1
 		// customer locations are nodes n + 1 -> n + 1 + m
-		var salesmanLocation = new Array(n);
-		var routes=new Array(n);
-		for(var i = 0; i < n; i++)
+		var salespersonLocation = new Array(nSalespeople);
+		var routes=new Array(nSalespeople);
+		for(var i = 0; i < nSalespeople; i++)
 		{
 			routes[i]=new Array();
 			routes[i].push(0);
-			salesmanLocation[i] = 0; // the starting point is the office
+			salespersonLocation[i] = 0; // the starting point is the office
 		}
 		
 		// distance matrix
@@ -82,7 +82,7 @@ module.exports = function(app) {
   	// fill distance matrix with garbage
   	for (var i = 0; i < nTotal; i++)
   	{
-  		// we only need to fill up half the matrix
+  		// half of the matrix is same as the other half
   		for (var j = 0; j <= i; j++)
   		{
   			if (i == j)
@@ -92,57 +92,71 @@ module.exports = function(app) {
   			}
   			else
   			{
-  				distanceMatrix[i][j] = Math.rand();
+  				var dist = Math.random();
+  				distanceMatrix[i][j] = dist;
+  				distanceMatrix[j][i] = dist;
   			}
   		}
   	}
 
-		var visited = new Array(m); // only need to mark customer nodes as visited
-		for (var i = 0; i < m; i++) {
-			visited[i] = 0; // nothing is visited
+		var visited = new Array(nAppointments); // only need to mark customer nodes as visited
+		for (var i = 0; i < nAppointments; i++)
+		{
+			visited[i] = false; // nothing is visited
 		}
 
 		// for each time slot
-		for(var appointment=0; appointment < 3; appointment++)//backwards
+		for(var appointment=0; appointment < 3; appointment++)
 		{
 			// for each salesman
-			for(var salesperson = 0; salesperson < n; salesperson++)
+			for(var salesperson = 0; salesperson < nSalespeople; salesperson++)
 			{
 				// translate to location in distance matrix
-				var translatedSalesperson = salesperson + 1;
+				var translatedSalespersonIdx = salesperson + 1;
 				
-				var origin = salesmanLocation[salesperson];//from last point
+				// origin does not need translated
+				var origin = salespersonLocation[salesperson];//from last point
 				var minDistance = Infinity;
 				var bestDest = null;
+				var bestTranslatedDest = null;
 				
 				// for each customer destination
-				for(var dest = 0; dest < m; dest++){
+				for(var dest = 0; dest < nAppointments; dest++)
+				{
 					// translate to location in distance matrix
-					var translatedDest = dest + n + 1;
-
-					distance=$scope.calculateDistance(origin,dest);
+					var translatedDestIdx = dest + nSalespeople + 1;
+					// get distance from distance matrix
+					distance = distanceMatrix[translatedSalespersonIdx][translatedDestIdx];
 					if (distance < minDistance && !visited[dest])
 					{
-						minDistance=distance;
-						bestDest=h;
-
+						minDistance = distance;
+						bestTranslatedDest = translatedDestIdx;
+						bestDest = dest;
 					}
 				}
-				routes[j].push(appointments[j][bestDest]);
-				visited[bestDest]=1;
-				DistanceForSales[k]+=minDistance;
 
-					
+				if (bestTranslatedDest) {
+					routes[salesperson].push(bestTranslatedDest);
+					visited[bestDest] = true;
+					salespersonLocation[salesperson] = bestTranslatedDest;
+				}
+				else 
+				{
+					console.log("something went wrong: ", bestDest);
+				}
 			}
-			for(var s=0;s<salesNumber;s++)
-			{
-				DistanceForSales+=$scope.calculateDistance(salesmanLocation[s],officeAddress);
-			}
-				
 		}
+
+		// append salesperson home to the route
+		for (var i = 0; i < nSalespeople; i++)
+		{
+			routes[i].push(i+1);
+		}
+		
 		console.log(routes)
 
 		// return json blob of routes
+
 	})
 
 	/*
