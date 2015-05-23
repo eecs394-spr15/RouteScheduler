@@ -1,10 +1,7 @@
 var mongoose = require('mongoose');
 
 var salesApptsSchema = new mongoose.Schema({
-	Appointments: [{
-	  name: { type: String},
-	  address: {type: String},
-	  type: {type: String}
+	Appointments: [{	  
 	  Appt. Id: { type: Number},
 	  Start Time: { type: String},
 	  End Time: { type: String},
