@@ -14,6 +14,7 @@ RouteOpt.service('EmployeesService', ['$http',function($http) {
 	}])
 	// inject the Todo service factory into our controller
 
+
 RouteOpt.controller('addEmployeeController', function($scope, $window, EmployeesService) {
 		$scope.create = function(employee) {
 			EmployeesService.create({
@@ -35,6 +36,7 @@ RouteOpt.controller('addEmployeeController', function($scope, $window, Employees
 			    console.log("an error occurred fetching employees")
 			  });
 		}		
+
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
 		// use the service to get all the todos
@@ -60,13 +62,16 @@ RouteOpt.controller('DisplayEmployeeController', function($scope, $window, Emplo
 			error(function(data, status, headers, config) {
 			    console.log("an error occurred fetching employees")
 			});
+
 		};
 		
 		
 	  
 	});
 
-RouteOpt.controller('uploadController', function($scope, $rootScope) {		
+RouteOpt.controller('uploadController', function($scope, $rootScope) {
+
+	
 		$scope.uploadFile = "";
 		
 		$scope.fileType = "sales";
@@ -77,11 +82,38 @@ RouteOpt.controller('uploadController', function($scope, $rootScope) {
 
 			reader.onload = function(evt) {
 				console.log("parse started");
+			  
+			  var csv = this.result;
+			  //console.log(csv);
+			  var lines = csv.split("\n");
+ 
+			  var result = [];
+			 
+			  var headers = lines[0].match(/(?:[^,"\r]+|"[^"]*")+/g);
+				
+						 	
 
-			  $rootScope.noAppts = false;
+			  for(var i=1;i<lines.length;i++){
+			 
+				  var obj = {};
+				  
+				  var currentline=lines[i].match(/(?:[^,"\r]+|"[^"]*")+/g);				
+			 
+				  if(currentline != null) {
+					  for(var j=0;j<headers.length;j++){
+						  obj[headers[j]] = currentline[j];
+					  }					
+			 
+				  	result.push(obj);
+				  }
+			 
+			  }
+			  
+			  //return result; //JavaScript object
+			  console.log(JSON.stringify(result)); //JSON
 
-			  console.log("funished parsing");  
-			 			 	
+			  console.log("finished parsing");			  
+			  
 			}
 
 			reader.readAsText($scope.uploadFile);
@@ -291,6 +323,12 @@ RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope) {
 		//update later once appointments come from backend
 		return false;
 	};
+
+  function getHeaders (appt) {
+  	for (var i = 0; i < appt.length; i++) {
+  		Things[i]
+  	};
+  };
 	
 });
 
