@@ -1,4 +1,9 @@
 var Employee = require('./models/employee');
+var SalesAppointmentModel = require('./models/salesModel');
+
+SalesAppointmentModel.find({}, function(err, data) {
+	console.log(data);
+});
 
 module.exports = function(app) {
 
@@ -23,6 +28,16 @@ module.exports = function(app) {
 				res.send(err);
 		});
 
+	});
+
+	app.post('/api/salesAppts', function(req, res) {
+		SalesAppointmentModel.create({
+			Appointments: req.body,
+			ApptDate: "05/23/2015"
+		}, function(err, employee) {
+			if (err)
+				res.send(err);
+		});
 	});
 
 	/*
