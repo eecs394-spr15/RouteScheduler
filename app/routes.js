@@ -127,6 +127,7 @@ module.exports = function(app) {
   			}
   			else
   			{
+  				// this is where we will call calculateDistance
   				var dist = Math.random();
   				distanceMatrix[i][j] = dist;
   				distanceMatrix[j][i] = dist;
@@ -187,7 +188,7 @@ module.exports = function(app) {
 		{
 			routes[i].push(i+1);
 		}
-		
+
 		console.log(routes)
 
 		// return json blob of routes
