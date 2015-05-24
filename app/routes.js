@@ -51,7 +51,6 @@ module.exports = function(app) {
 
  	app.get('/api/appointments', function(req, res) {
     Appointment.find(function(err, data) {
-
     	if (err)
       		res.send(err);
 
@@ -223,4 +222,11 @@ module.exports = function(app) {
 	app.get('/manage', function(req, res) {
 		res.render('addemployee');
 	});
+	app.get('/appointments', function(req, res) {
+		res.render('appointments');
+	});
+	app.get('/employees', function(req, res) {
+		res.render('employees');
+	});
+	
 };
