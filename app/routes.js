@@ -1,22 +1,30 @@
 var Employee = require('./models/employee');
 var SalesAppointmentModel = require('./models/salesModel');
 
-SalesAppointmentModel.find({}, function(err, data) {
-	console.log(data);
-});
+
 
 module.exports = function(app) {
 
 	// api
  	app.get('/api/employees', function(req, res) {
-    Employee.find({}, function(err, data) {
+	    Employee.find({}, function(err, data) {
 
-    	if (err)
-      	res.send(err);
+	    	if (err)
+	      	res.send(err);
 
-      res.json(data);
-    });
-  });
+	      res.json(data);
+	    });
+  	});
+
+ 	app.get('/api/salesAppts', function(req, res) {
+	    SalesAppointmentModel.find({}, function(err, data) {
+
+	    	if (err)
+	      	res.send(err);
+
+	      res.json(data);
+	    });
+  	});  	
  	
 	app.post('/api/employees', function(req, res) {
 		Employee.create({
