@@ -8,7 +8,8 @@ var salesApptsSchema = new mongoose.Schema({
 	  Opportunity #: { type: String},
 	  Customer Name: { type: String},
 	  Job Site: { type: String}
-	 }]
+	 }],
+	 ApptDate: { type: Date}
 });
 
 module.exports = mongoose.model('salesAppointments', salesApptsSchema);
