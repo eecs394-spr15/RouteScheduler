@@ -1,9 +1,9 @@
 var Employee = require('./models/employee');
 var Appointment = require('./models/appointment');
-var EARTH_RADIUS = 6378137.0;    //
-var PI = Math.PI;
+var EARTH_RADIUS = 6378137.0;
+
 var getRad = function(d){
-	return d*PI/180.0;
+	return d*Math.PI/180.0;
 }
 var calculateDistance = function(origin, dest) {
 	var lat1=origin[0];
@@ -36,26 +36,7 @@ var calculateDistance = function(origin, dest) {
     h2 = (3*r +1)/2/s;
     
     return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
-/*
-	lat1=origin[0];
-	lat2=dest[0];
-	lon1=origin[1];
-	lon2=dest[1];
-	var R = 6371000; // metres
-	var φ1 = lat1*Math.PI/180;
-	var φ2 = lat2*Math.PI/180;
-	var Δφ = (lat2-lat1)*Math.PI/180;
-	var Δλ = (lon2-lon1)*Math.PI/180;
-
-	var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-	        Math.cos(φ1) * Math.cos(φ2) *
-	        Math.sin(Δλ/2) * Math.sin(Δλ/2);
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-	var d = R * c;
-	return d;
-	*/
-	}
+}
 module.exports = function(app) {
 
 	// api
@@ -109,7 +90,6 @@ module.exports = function(app) {
 		// the first n rows of the sales
 		// I am using a full distance matrix because im pretty sure thats how a real non-greedy algorithm would work.
 		// and I don't care if it is more inefficient
-
 		var nSalespeople = 3;
 		var nAppointments = nSalespeople * 3;
 		var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
