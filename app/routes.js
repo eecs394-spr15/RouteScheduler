@@ -97,6 +97,7 @@ module.exports = function(app) {
 		}, function(err, geocode) {
 			if (err)
 				res.send(err);
+			res.end("successful geocode create");
 		});
 	});
 
@@ -239,6 +240,8 @@ module.exports = function(app) {
 		}, function(err, employee) {
 			if (err)
 				res.send(err);
+
+			res.end("successfully created sales appointments");
 		});
 	});
 
