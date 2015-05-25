@@ -77,8 +77,9 @@ module.exports = function(app) {
 		});
 	});
 
-	app.get('/api/geocode', function(req, res) {
-		Geocode.find({address : req.body.address}, function(err, data) {
+	app.get('/api/geocode/:address', function(req, res) {
+		var address = req.params.address;
+		Geocode.find({'address' : address}, function(err, data) {
 			if (err)
 				res.send(err);
 			res.json(data);

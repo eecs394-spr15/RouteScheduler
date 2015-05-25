@@ -18,6 +18,14 @@ RouteOpt.service('EmployeesService', ['$http',function($http) {
 			return $http.delete('/api/employees/' + id);
 		};
 
+		this.postGeocode = function(data) {
+			return $http.post('/api/geocode', data);
+		};
+
+		this.getGeocode = function(address) {
+			return $http.get('/api/geocode/' + address);
+		};
+
 		this.getAppointments = function() {
 			return $http.get('/api/appointments');
 		};
@@ -136,7 +144,7 @@ RouteOpt.controller('DisplayEmployeeController', function($scope, $window, Emplo
 	  
 	});
 
-RouteOpt.controller('uploadController', function($scope, $rootScope, Appointments) {
+RouteOpt.controller('uploadController', function($scope, $rootScope, Appointments, EmployeesService) {
 
 	
 		$scope.uploadFile = "";
@@ -173,23 +181,38 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 			 
 				  	result.push(obj);
 				  }
-			 
+			  }
+
+			  for (var i = 0; i < result.length; i++) {
+			  	var address = result[i]['Job Site'];
+
+			  	// check if we have already geocoded this address
+			  	EmployeesService.getGeocode(address)
+						.success(function(data, status, headers, config) {
+							// if nothing was returned, geocode the address
+							console.log(data);
+							if (!data.length)
+							{
+								console.log("no geocode for this address found in database")
+								setTimeout($scope.codeAddress(address), 200);
+							}
+							else
+							{
+								console.log("geocode for this address found");
+							}
+						})
+						.error(function(data, status, headers, config) {
+						    console.log("an error occurred looking for geocoded address");
+						});	
 			  }
 			  
 			  Appointments.addSales(JSON.stringify(result));
+			  console.log("finished parsing");
 
-			  //return result; //JavaScript object
-			  console.log(JSON.stringify(result)); //JSON
-
-			  console.log("finished parsing");			  
-			  
 			}
 
 			reader.readAsText($scope.uploadFile);
-
-		}
-
-			
+		}		
 	});
 
 RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope, Appointments) {
