@@ -1,5 +1,5 @@
 var Employee = require('./models/employee');
-var SalesAppointments = require('./models/salesModel');
+var SalesAppointment = require('./models/salesModel');
 
 var EARTH_RADIUS = 6378137.0;
 
@@ -63,9 +63,10 @@ module.exports = function(app) {
 	});
 
 	app.get('/api/salesperson-routes', function(req, res) {
-		var d=new Date()
-	 	SalesAppointments.find({ApptDate: d.getFullYear()+"-"+'0'+(d.getMonth()+1)+"-"+(d.getDate()-1)+"T00:00:00.000Z"},function(err,data){
-			appointments=data.Appointments;
+		var d=new Date();
+	 	SalesAppointment.find({ApptDate: d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)},function(err,data){
+	 		console.log(data);
+			var appointments=data[0].Appointments;
 			console.log(appointments);
 
 			// add a check right here if the optimized routes are already in the database?
