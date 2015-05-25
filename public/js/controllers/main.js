@@ -105,14 +105,14 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 				console.log("parse started");
 			  
 			  var csv = this.result;
-			  //console.log(csv);
+			  console.log(csv);
 			  var lines = csv.split("\n");
  
 			  var result = [];
 			 
 			  var headers = lines[0].match(/(?:[^,"\r]+|"[^"]*")+/g);
 				
-						 	
+			  console.log(headers);			 	
 
 			  for(var i=1;i<lines.length;i++){
 			 
@@ -152,13 +152,14 @@ RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope, Appoint
 	Appointments.getSales().
 		success(function(data, status, headers, config) {
 			$scope.appointments = data;
+			console.log(JSON.stringify($scope.appointments));
 	}).
 	error(function(data, status, headers, config) {
-	    console.log("an error occurred fetching Appointments")
+	    console.log("an error occurred fetching Appointments");
 	});	
 	
 
-	$scope.headers = ["Appt. Id", "Start Time", "End Time", "Opportunity #", "Customer Name", "Job Site"];
+	$scope.headers = ["Appt Id", "Start Time", "End Time", "Opportunity #", "Customer Name", "Job Site"];
 	$scope.noAppts = function() {
 		//update later once appointments come from backend
 		return false;

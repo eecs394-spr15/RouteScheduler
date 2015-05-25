@@ -1,7 +1,11 @@
 var Employee = require('./models/employee');
 var SalesAppointmentModel = require('./models/salesModel');
 
-
+/*
+SalesAppointmentModel.find({}, function(err, data) {
+	console.log(data);
+});
+*/
 
 module.exports = function(app) {
 
@@ -14,18 +18,20 @@ module.exports = function(app) {
 
 	      res.json(data);
 	    });
-  	});
-
+	  });
+ 	
  	app.get('/api/salesAppts', function(req, res) {
 	    SalesAppointmentModel.find({}, function(err, data) {
 
+	    //SalesAppointmentModel.find({ApptDate: d.getFullYear()+"-"+0+(d.getMonth()+1)+"-"+(d.getDate()-1)+"T00:00:00.000Z"},function(err,data){
+	    	
 	    	if (err)
 	      	res.send(err);
 
 	      res.json(data);
 	    });
-  	});  	
- 	
+	  });
+
 	app.post('/api/employees', function(req, res) {
 		Employee.create({
 			name : req.body.name,
