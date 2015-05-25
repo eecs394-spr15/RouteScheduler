@@ -150,17 +150,80 @@ angular.module('RouteOptimizer', [])
 				EmployeesService.getAppointments()
 					.success(function(data, status, headers, config){
 						var Addresses = [];
-						for(var i = 0; i < data.length; i++){
+						var i;
+						var j;
+						for(i = 0; i < data.length; i++){
 							if(data[i].type == AType)
-								$scope.codeAddress(data[i].address);
+								$Addresses.push(data[i].address);
 						}
+						for(i = 0; i < Addresses.length; i+=5){
+							setTimeout(function(){for(j = 0; j < 5; j++){
+														if(i+j >= Addresses.length)
+															break;
+														$scope.codeAddress(Addresses[i+j]);
+													}}, 1000)
+							if(i+j >= Addresses.length)
+								break;
+						}
+						console.log(Locations);
 					})
 					.error(function(data, status, headers, config){
 						console.log("Error occurred fetching appointments: " + status);
 					});
 			}
-			var A=[41.87355847,-87.79641662];
-			var B=[41.98512347,-87.65592603];
+
+			codeAddressesTest = function(){
+				var Addresses = [];
+				var temp = [];
+				var i;
+				var j;
+				Addresses.push("Wichita, KS");
+				Addresses.push("Madison, WI");
+				Addresses.push("Omaha, NE");
+				Addresses.push("Chicago, IL");
+				Addresses.push("Orlando, FL");
+				Addresses.push("Evanston, IL");
+				Addresses.push("Milwaukee, WI");
+				Addresses.push("Los Angeles, CA");
+				Addresses.push("Minneapolis, MN");
+				Addresses.push("Anaheim, CA");
+				Addresses.push("Denver, CO");
+				Addresses.push("Manhattan, NY");
+				Addresses.push("San Francisco, CA");
+				Addresses.push("Trenton, NJ");
+				Addresses.push("Boston, MA");
+				Addresses.push("Boulder, CO");
+				Addresses.push("Baltimore, MD");
+				Addresses.push("Kansas City, MO");
+				Addresses.push("Washington DC");
+				Addresses.push("Oregon, WI");
+				Addresses.push("Appleton, WI");
+				Addresses.push("Louisville, KY");
+				//for(i = 0; i < data.length; i++){
+				//	if(data[i].type == AType)
+				//		$Addresses.push(data[i].address);
+				//}
+				for(i = 0; i < Addresses.length; i+=5){
+					for(j = 0; j < 5; j++){
+						console.log(i+j);
+						if(i+j >= Addresses.length)
+							break;
+						temp.push(Addresses[i+j]);
+						}
+					setTimeout(function(){codeArray(temp)}, 1000);
+					if(i+j >= Addresses.length)
+						break;
+				}
+			}
+
+			codeArray = function(arry){
+				for(var i = 0; i < arry.length; i++)
+					console.log(arry[i]);
+				arry = [];
+			}
+			
+			//var A=[41.87355847,-87.79641662];
+			//var B=[41.98512347,-87.65592603];
 			//console.log($scope.calculateDistance(A,B));
-			//$scope.codeAppointmentsByType("customer");
+			codeAddressesTest();
 	});
