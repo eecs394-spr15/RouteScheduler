@@ -152,7 +152,29 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 			  }
 		 
 		  }
-
+		  var i=0;
+		  var address;
+		  function storeGeo(){
+		  	address=result[i]['Job Site'];
+		  	i++;
+		  	EmployeesService.getGeocode(address)
+					.success(function(data, status, headers, config) {
+						// if nothing was returned, geocode the address
+						console.log(data);
+						if (!data.length)
+						{
+							console.log("no geocode for this address found in database")
+							$scope.codeAddress(address);
+						}
+					})
+					.error(function(data, status, headers, config) {
+					    console.log("an error occurred looking for geocoded address");
+					});	
+			if(i<result.length)
+				setTimeout(storeGeo(),200);
+		  }
+		  storeGeo();
+		  /*
 		  for (var i = 0; i < result.length; i++) {
 		  	var address = result[i]['Job Site'];
 
@@ -171,6 +193,7 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 					    console.log("an error occurred looking for geocoded address");
 					});	
 		  }
+		  */
 		  
 		  Appointments.addSales(JSON.stringify(result));
 		  console.log("finished parsing");			  
