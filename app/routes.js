@@ -8,6 +8,7 @@ var EARTH_RADIUS = 6378137.0;
 var getRad = function(d){
 	return d*Math.PI/180.0;
 }
+
 var calculateDistance = function(origin, dest) {
 	var lat1=origin[0];
 	var lat2=dest[0];
@@ -40,6 +41,7 @@ var calculateDistance = function(origin, dest) {
     
     return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
 }
+
 module.exports = function(app) {
 
 	// api
@@ -73,7 +75,24 @@ module.exports = function(app) {
 			if (err)
 				res.send(err);
 		});
+	});
 
+	app.get('/api/geocode', function(req, res) {
+		Geocode.find({address : req.body.address}, function(err, data) {
+			if (err)
+				res.send(err);
+			res.json(data);
+		});
+	});
+
+	app.post('/api/geocode', function(req, res) {
+		Geocode.create({
+			address : req.body.address,
+			coord : req.body.coord
+		}, function(err, geocode) {
+			if (err)
+				res.send(err);
+		});
 	});
 
 	app.get('/api/salesperson-routes', function(req, res) {
