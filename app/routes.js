@@ -64,8 +64,9 @@ module.exports = function(app) {
 
 	app.get('/api/salesperson-routes', function(req, res) {
 		var d=new Date()
-	 	salesAppointments.find({ApptDate: d.getFullYear()+"-"+0+(d.getMonth()+1)+"-"+（d.getDate()－1）+"T00:00:00.000Z"},function(err,data){
+	 	salesAppointments.find({ApptDate: d.getFullYear()+"-"+'0'+(d.getMonth()+1)+"-"+(d.getDate()-1)+"T00:00:00.000Z"},function(err,data){
 			appointments=data.Appointments;
+			console.log(appointments);
 
 			// add a check right here if the optimized routes are already in the database?
 			// then don't run the algorithm
