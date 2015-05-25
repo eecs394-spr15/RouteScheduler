@@ -43,8 +43,8 @@ RouteOpt.factory('Appointments', ['$http',function($http) {
 			addTech : function(data) {
 				return $http.post('/api/techAppts', data);
 			}
-		}
-	}])
+		};
+	}]);
 
 RouteOpt.controller('addEmployeeController', function($scope, $window, EmployeesService) {
 		$scope.create = function(employee) {
@@ -192,23 +192,29 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 			
 	});
 
+
 RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope, Appointments) {
 
 
+	$scope.noapp = false;
 	Appointments.getSales().
 		success(function(data, status, headers, config) {
-			$scope.appointments = data;
-			console.log(JSON.stringify($scope.appointments));
+			if(data.length > 0) {				
+				$scope.appointments = data;
+			} else {
+				$scope.noapp = true;
+			}
+			
 	}).
 	error(function(data, status, headers, config) {
-	    console.log("an error occurred fetching Appointments");
+	    console.log("an error occurred fetching Appointments")
 	});	
 	
 
 	$scope.headers = ["Appt Id", "Start Time", "End Time", "Opportunity #", "Customer Name", "Job Site"];
 	$scope.noAppts = function() {
 		//update later once appointments come from backend
-		return false;
+		return $scope.noapp;
 	};
 
   function getHeaders (appt) {
@@ -218,6 +224,7 @@ RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope, Appoint
   };
 	
 });
+
 
 RouteOpt.directive('fileModel', ['$parse', function ($parse) {
     return {
