@@ -1,5 +1,6 @@
 var Employee = require('./models/employee');
 var SalesAppointment = require('./models/salesModel');
+var Geocode = require('./models/geoCoding');
 
 var EARTH_RADIUS = 6378137.0;
 
