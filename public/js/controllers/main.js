@@ -1,4 +1,6 @@
 var RouteOpt = angular.module('RouteOptimizer', []);
+
+
 RouteOpt.service('EmployeesService', ['$http',function($http) {
 		this.get = function() {
 			return $http.get('/api/employees');
@@ -24,6 +26,25 @@ RouteOpt.service('EmployeesService', ['$http',function($http) {
 			return $http.get('/api/salesperson-routes');
 		};
 	}]);
+
+
+RouteOpt.factory('Appointments', ['$http',function($http) {
+		
+		return {
+			getSales : function() {
+				return $http.get('/api/salesAppts');
+			},
+			addSales : function(data) {
+				return $http.post('/api/salesAppts', data);
+			},
+			getTech : function() {
+				return $http.get('/api/techAppts');
+			},
+			addTech : function(data) {
+				return $http.post('/api/techAppts', data);
+			}
+		}
+	}])
 
 RouteOpt.controller('addEmployeeController', function($scope, $window, EmployeesService) {
 		$scope.create = function(employee) {
@@ -115,7 +136,7 @@ RouteOpt.controller('DisplayEmployeeController', function($scope, $window, Emplo
 	  
 	});
 
-RouteOpt.controller('uploadController', function($scope, $rootScope) {
+RouteOpt.controller('uploadController', function($scope, $rootScope, Appointments) {
 
 	
 		$scope.uploadFile = "";
@@ -155,6 +176,8 @@ RouteOpt.controller('uploadController', function($scope, $rootScope) {
 			 
 			  }
 			  
+			  Appointments.addSales(JSON.stringify(result));
+
 			  //return result; //JavaScript object
 			  console.log(JSON.stringify(result)); //JSON
 

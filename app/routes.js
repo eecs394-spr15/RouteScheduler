@@ -1,5 +1,5 @@
 var Employee = require('./models/employee');
-var salesAppointments = require('./models/salesModel');
+var SalesAppointments = require('./models/salesModel');
 
 var EARTH_RADIUS = 6378137.0;
 
@@ -64,7 +64,7 @@ module.exports = function(app) {
 
 	app.get('/api/salesperson-routes', function(req, res) {
 		var d=new Date()
-	 	salesAppointments.find({ApptDate: d.getFullYear()+"-"+'0'+(d.getMonth()+1)+"-"+(d.getDate()-1)+"T00:00:00.000Z"},function(err,data){
+	 	SalesAppointments.find({ApptDate: d.getFullYear()+"-"+'0'+(d.getMonth()+1)+"-"+(d.getDate()-1)+"T00:00:00.000Z"},function(err,data){
 			appointments=data.Appointments;
 			console.log(appointments);
 
@@ -192,6 +192,16 @@ module.exports = function(app) {
 		
 
 	})
+
+	app.post('/api/salesAppts', function(req, res) {
+		SalesAppointment.create({
+			Appointments: req.body,
+			ApptDate: "05/23/2015"
+		}, function(err, employee) {
+			if (err)
+				res.send(err);
+		});
+	});
 
 	/*
 	// delete a todo
