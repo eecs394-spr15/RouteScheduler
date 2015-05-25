@@ -2,6 +2,10 @@ var Employee = require('./models/employee');
 var SalesAppointment = require('./models/salesModel');
 var Geocode = require('./models/geoCoding');
 
+Geocode.find({}, function(err, data) {
+			console.log(data);
+		});
+
 var EARTH_RADIUS = 6378137.0;
 
 
