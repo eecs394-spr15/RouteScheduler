@@ -1,20 +1,27 @@
 <% include header %>
+
 <div class="container" ng-controller="viewAppointmentsCtrl">
+
 	<h2 class="sub-header">Appointments</h2>
+
 	<div class="table-responsive" ng-hide = "noAppts()">
 	  <table class="table table-striped">
+
 	    <thead>
 	      <tr>
 	        <th ng-repeat="h in headers">{{h}}</th>                  
 	      </tr>
 	    </thead>
-	    <tbody>
-	      <tr ng-repeat="appt in appointments">
-	        <td ng-repeat="h in headers">{{appt[h]}}</td>                  
-	      </tr>                
-	    </tbody>
+
+		<tbody>
+            <tr ng-repeat="appt in appointments">
+              <td ng-repeat="h in headers">{{appt[h]}}</td>                  
+            </tr>                
+        </tbody>
+
 	  </table>
 	</div>
+
 	<div ng-show="noAppts()">
 		<h4>
 		No Appointments for Today
