@@ -58,23 +58,45 @@ module.exports = function(app) {
 	    });
   	});
 
- 	app.get('/api/salesAppts', function(req, res) {
-	    SalesAppointmentModel.find({}, function(err, data) {
-
-	    //SalesAppointmentModel.find({ApptDate: d.getFullYear()+"-"+0+(d.getMonth()+1)+"-"+(d.getDate()-1)+"T00:00:00.000Z"},function(err,data){
-	    	
-	    	if (err)
-	      	res.send(err);
-
-	      res.json(data);
-	    });
-	  });
-
-	app.post('/api/employees', function(req, res) {
+ 	app.post('/api/employees', function(req, res) {
 		Employee.create({
 			name : req.body.name,
 			address : req.body.address,
 			type : req.body.type
+		}, function(err, employee) {
+			if (err)
+				res.send(err);
+		});
+
+	});
+
+ 	app.get('/api/salesAppts', function(req, res) {
+
+	    var d=new Date();
+	 	
+	 	SalesAppointment.find({ApptDate: d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate())},function(err,data){
+	 		console.log(data);
+	 		var appointments = [];
+			if(data.length > 0) {
+				console.log(data[data.length - 1].ApptDate);
+				appointments=data[data.length - 1].Appointments;
+			}
+
+			console.log(appointments);
+	    	
+	    	if (err)
+	      	res.send(err);
+
+	      res.json(appointments);
+	    });
+	});
+
+ 	app.post('/api/salesAppts', function(req, res) {
+		var d = new Date();
+
+		SalesAppointment.create({
+			Appointments: req.body,
+			ApptDate: (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear()
 		}, function(err, employee) {
 			if (err)
 				res.send(err);
@@ -100,6 +122,8 @@ module.exports = function(app) {
 			res.end("successful geocode create");
 		});
 	});
+
+
 
 	app.get('/api/salesperson-routes', function(req, res) {
 		var d=new Date();
@@ -245,19 +269,6 @@ module.exports = function(app) {
 		});
 	});
 
-	/*
-	// delete a todo
-	app.delete('/api/todos/:todo_id', function(req, res) {
-		Todo.remove({
-			_id : req.params.todo_id
-		}, function(err, todo) {
-			if (err)
-				res.send(err);
-
-			getTodos(res);
-		});
-	});
-*/
 
 	// application -------------------------------------------------------------
 
