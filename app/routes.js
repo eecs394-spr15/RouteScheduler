@@ -13,11 +13,8 @@ var getRad = function(d){
 	return d*Math.PI/180.0;
 }
 
-var calculateDistance = function(origin, dest) {
-	var lat1=origin[0];
-	var lat2=dest[0];
-	var lng1=origin[1];
-	var lng2=dest[1];
+var calculateDistance = function(lat1,lat2,lng1,lng2) {
+
 	var f = getRad((lat1 + lat2)/2);
     var g = getRad((lat1 - lat2)/2);
     var l = getRad((lng1 - lng2)/2);
@@ -103,6 +100,7 @@ module.exports = function(app) {
 
 	app.get('/api/salesperson-routes', function(req, res) {
 		var d=new Date();
+
 	 	SalesAppointment.find({ApptDate: d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)},function(err,data){
 	 		console.log(data);
 			var appointments=data[0].Appointments;
@@ -126,6 +124,7 @@ module.exports = function(app) {
 			// the first n rows of the sales
 			// I am using a full distance matrix because im pretty sure thats how a real non-greedy algorithm would work.
 			// and I don't care if it is more inefficient
+
 			var nSalespeople = 3;
 			var nAppointments = nSalespeople * 3;
 			var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
@@ -134,6 +133,7 @@ module.exports = function(app) {
 			// office is node 0
 			// saleperson homes are nodes 1 -> n + 1
 			// customer locations are nodes n + 1 -> n + 1 + m
+
 			var salespersonLocation = new Array(nSalespeople);
 			var routes=new Array(nSalespeople);
 			for(var i = 0; i < nSalespeople; i++)
@@ -142,34 +142,98 @@ module.exports = function(app) {
 				routes[i].push(0);
 				salespersonLocation[i] = 0; // the starting point is the office
 			}
+
+			//an array of all man and address & location 
+			var count=0;
+			var aList=[{
+				"name":"GreenBay office",
+				"address":"1125 Tuckaway Ln, Menasha, WI 54952"
+			},
+			{
+			    "name":"Hinkley, Elizabeth A.",
+			    "address":"506 N. Center St",
+			    "city":"Appleton",
+			    "state":"WI",
+			    "zip":54911,
+			    "team":"Green Bay",
+			    "type":"Sales"
+			},
+			{
+			    "name":"Romnek, Michael E.",
+			    "address":"2400 E John St",
+			    "city":"Appleton",
+			    "state":"WI",
+			    "zip":54915,
+			    "team":"Green Bay",
+			    "type":"Sales"
+			},
+			{
+			    "name":"Stratton, Erik D.",
+			    "address":"4715 Turkey Trail",
+			    "city":"Amherst",
+			    "state":"WI",
+			    "zip":54406,
+			    "team":"Green Bay",
+			    "type":"Sales"
+  			}];
+
+			var locationList=[{"lat":44.2357938,"lon":-88.4239336},
+			{"lat":44.265963,"lon":-88.395845},
+			{"lat":44.247456,"lon":-88.370005},
+			{"lat":44.4439691,"lon":-89.3185814}];
+
+			var timeSlot=["12:30:00 PM","3:30:00 PM","6:30:00 PM"];
+			for(var slot=0; slot<3; slot++){
+				for (var k=0; k< nTotal; k++)
+				{
+					if(appointments[k]["Start Time"]==timeSlot[slot]){
+						aList.append(appointments[k]);
+						geocodingresults.find({"address":appointments[k]["address"]},function(err,data){
+							locationList.append(data["coord"]);
+							count+=1;
+							if(count>=nSalespeople)
+								break;
+						})
+					}
+					
+				}
+				while(count<nSalespeople){
+					aList.append("NON");
+					locationList.append("lat":0;"lon":0)
+				}
+				count=0;
+			}
 			
+			
+			
+
 			// distance matrix
 			var distanceMatrix = new Array(nTotal);
-	  	for (var i = 0; i < nTotal; i++)
-	  	{
-	    	distanceMatrix[i] = new Array(nTotal);
-	  	}
+		  	for (var i = 0; i < nTotal; i++)
+		  	{
+		    	distanceMatrix[i] = new Array(nTotal);
+		  	}
 
-	  	// fill distance matrix with garbage
-	  	for (var i = 0; i < nTotal; i++)
-	  	{
-	  		// half of the matrix is same as the other half
-	  		for (var j = 0; j <= i; j++)
-	  		{
-	  			if (i == j)
-	  			{
-	  				// nodes distance to itself is 0
-	  				distanceMatrix[i][j] = 0;
-	  			}
-	  			else
-	  			{
-	  				// this is where we will call calculateDistance
-	  				var dist = Math.random();
-	  				distanceMatrix[i][j] = dist;
-	  				distanceMatrix[j][i] = dist;
-	  			}
-	  		}
-	  	}
+		  	// fill distance matrix with garbage
+		  	for (var i = 0; i < nTotal; i++)
+		  	{
+		  		// half of the matrix is same as the other half
+		  		for (var j = 0; j <= i; j++)
+		  		{
+		  			if (i == j)
+		  			{
+		  				// nodes distance to itself is 0
+		  				distanceMatrix[i][j] = 0;
+		  			}
+		  			else
+		  			{
+		  				// this is where we will call calculateDistance
+		  				var dist = calculateDistance(locationList[i]["lat"],locationList[j]["lat"],locationList[i]["lon"],locationList[j]["lon"]);
+		  				distanceMatrix[i][j] = dist;
+		  				distanceMatrix[j][i] = dist;
+		  			}
+		  		}
+		  	}
 
 			var visited = new Array(nAppointments); // only need to mark customer nodes as visited
 			for (var i = 0; i < nAppointments; i++)
