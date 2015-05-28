@@ -313,7 +313,7 @@ RouteOpt.controller('viewResultsCtrl', function($scope, Appointments) {
 	$scope.findApptDetails = function(ids){
 		//Whoever connects this to the backend should make a query to get the appointment
 		//data based on the id
-
+		
 		$scope.employeeAppts = [{
 		    "Appt Id":764563,
 		    "Start Time":"6:30:00 PM",

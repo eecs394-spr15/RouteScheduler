@@ -87,7 +87,7 @@ module.exports = function(app) {
 	    	if (err)
 	      	res.send(err);
 
-	      res.json(appointments);
+	        res.json(appointments);
 	    });
 	});
 
@@ -125,10 +125,11 @@ module.exports = function(app) {
 
 
 
+
 	app.get('/api/salesperson-routes', function(req, res) {
 		var d=new Date();
 	 	SalesAppointment.find({ApptDate: d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)},function(err,data){
-	 		console.log(data);
+	 		//console.log(data);
 	 		if(data.length > 0) {
 				var appointments=data[0].Appointments;
 				console.log(appointments);
@@ -259,17 +260,7 @@ module.exports = function(app) {
 
 	})
 
-	app.post('/api/salesAppts', function(req, res) {
-		SalesAppointment.create({
-			Appointments: req.body,
-			ApptDate: "05/23/2015"
-		}, function(err, employee) {
-			if (err)
-				res.send(err);
 
-			res.end("successfully created sales appointments");
-		});
-	});
 
 
 	// application -------------------------------------------------------------
