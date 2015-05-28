@@ -2,10 +2,10 @@ var Employee = require('./models/employee');
 var SalesAppointment = require('./models/salesModel');
 var Geocode = require('./models/geoCoding');
 
-Geocode.find({}, function(err, data) {
+/*Geocode.find({}, function(err, data) {
 			console.log(data);
 		});
-
+*/
 var EARTH_RADIUS = 6378137.0;
 
 
@@ -102,8 +102,8 @@ module.exports = function(app) {
 		var d=new Date();
 
 	 	SalesAppointment.find({ApptDate: d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)},function(err,data){
-	 		console.log(data);
-			var appointments=data[0].Appointments;
+	 		
+			var appointments=data.Appointments;
 			console.log(appointments);
 
 			// add a check right here if the optimized routes are already in the database?
@@ -186,20 +186,22 @@ module.exports = function(app) {
 			for(var slot=0; slot<3; slot++){
 				for (var k=0; k< nTotal; k++)
 				{
+					console.log(appointments[k]);
 					if(appointments[k]["Start Time"]==timeSlot[slot]){
 						aList.append(appointments[k]);
 						geocodingresults.find({"address":appointments[k]["address"]},function(err,data){
 							locationList.append(data["coord"]);
-							count+=1;
-							if(count>=nSalespeople)
-								break;
+							
+							
 						})
+						count+=1;
 					}
-					
+					if(count>=nSalespeople)
+						break;
 				}
 				while(count<nSalespeople){
 					aList.append("NON");
-					locationList.append("lat":0;"lon":0)
+					locationList.append({"lat":0,"lon":0})
 				}
 				count=0;
 			}
@@ -232,6 +234,7 @@ module.exports = function(app) {
 		  				distanceMatrix[i][j] = dist;
 		  				distanceMatrix[j][i] = dist;
 		  			}
+		  			console.log(dist)
 		  		}
 		  	}
 
