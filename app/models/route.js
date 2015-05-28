@@ -1,8 +1,19 @@
 var mongoose = require('mongoose');
 
 var routesSchema = new mongoose.Schema({
-  employee: { type: Schema.ObjectID, 'default': null, ref: 'Employee' },
-  appointmentList: [{ type: Number }], // this is the appointment ID as given from the uploaded .csv
+  employee: {
+    name: { type: String},
+    address: {type: String},
+    type: {type: String}
+  },
+  appointmentList: [{   
+    'Appt Id': { type: Number},
+    'Start Time': { type: String},
+    'End Time': { type: String},
+    'Opportunity #': { type: String},
+    'Customer Name': { type: String},
+    'Job Site': { type: String}
+   }], // this is the appointment ID as given from the uploaded .csv
   routeDate: { type: Date }
 });
 

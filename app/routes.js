@@ -2,10 +2,6 @@ var Employee = require('./models/employee');
 var SalesAppointment = require('./models/salesModel');
 var Geocode = require('./models/geoCoding');
 
-/*Geocode.find({}, function(err, data) {
-			console.log(data);
-		});
-*/
 var EARTH_RADIUS = 6378137.0;
 
 
@@ -56,7 +52,7 @@ module.exports = function(app) {
   	});
 
  	app.get('/api/salesAppts', function(req, res) {
-	    SalesAppointmentModel.find({}, function(err, data) {
+	    SalesAppointment.find({}, function(err, data) {
 
 	    //SalesAppointmentModel.find({ApptDate: d.getFullYear()+"-"+0+(d.getMonth()+1)+"-"+(d.getDate()-1)+"T00:00:00.000Z"},function(err,data){
 	    	
@@ -101,204 +97,234 @@ module.exports = function(app) {
 	app.get('/api/salesperson-routes', function(req, res) {
 		var d=new Date();
 
-	 	SalesAppointment.find({ApptDate: d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)},function(err,data){
-	 		
-			var appointments=data.Appointments;
+	 	SalesAppointment.find({ApptDate: d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)},function(err, data)
+	 	{
+			var appointments=data[0].Appointments;
 			console.log(appointments);
-
-			// add a check right here if the optimized routes are already in the database?
-			// then don't run the algorithm
-
-			// run algorithm
-
-			// there will be a separate task for calculating the distance matrix..
-			// just hard code it for now
-			// this is old stuff
-			//var homeAddresses=[[41.87355847,-87.79641662],[41.98512347,-87.65592603],[ 41.75050329,-87.69003923],[41.74313511, -87.64126162][41.98124939,-87.61216696],[41.77933782,-87.77089982]];
-			//var appointments=[[[ 41.95304104, -87.66079453 ],[41.90056597,-87.4538938],[41.85340177, -87.51506404],[41.81984669,-87.52693874],[ 41.95472842,-87.7796233],[41.97387503,-87.58250468]],
-			//[[ 41.80242171,-87.47432295],[41.87915987,-87.61111856],[41.8855845,-87.55396771],[41.94003661,-87.45577421],[41.78695588,-87.67820154],[41.86954838,-87.65298139]],
-			//[[41.77982066,-87.66223627],[41.89893941, -87.61800847],[41.82592984,-87.76200356],[41.98791955,-87.5361794],[41.81677539,-87.64333341],[41.9154257,-87.69469442]]];
-			//var officeAddress=[41.86928379,-87.5629177];
-
-			// assume n salespeople and m customers
-			// the first n rows of the sales
-			// I am using a full distance matrix because im pretty sure thats how a real non-greedy algorithm would work.
-			// and I don't care if it is more inefficient
-
-			var nSalespeople = 3;
-			var nAppointments = nSalespeople * 3;
-			var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
-
-			// initialize stuff needed for algorithm
-			// office is node 0
-			// saleperson homes are nodes 1 -> n + 1
-			// customer locations are nodes n + 1 -> n + 1 + m
-
-			var salespersonLocation = new Array(nSalespeople);
-			var routes=new Array(nSalespeople);
-			for(var i = 0; i < nSalespeople; i++)
+			Geocode.find({}, function(err, geocodes)
 			{
-				routes[i]=new Array();
-				routes[i].push(0);
-				salespersonLocation[i] = 0; // the starting point is the office
-			}
-
-			//an array of all man and address & location 
-			var count=0;
-			var aList=[{
-				"name":"GreenBay office",
-				"address":"1125 Tuckaway Ln, Menasha, WI 54952"
-			},
-			{
-			    "name":"Hinkley, Elizabeth A.",
-			    "address":"506 N. Center St",
-			    "city":"Appleton",
-			    "state":"WI",
-			    "zip":54911,
-			    "team":"Green Bay",
-			    "type":"Sales"
-			},
-			{
-			    "name":"Romnek, Michael E.",
-			    "address":"2400 E John St",
-			    "city":"Appleton",
-			    "state":"WI",
-			    "zip":54915,
-			    "team":"Green Bay",
-			    "type":"Sales"
-			},
-			{
-			    "name":"Stratton, Erik D.",
-			    "address":"4715 Turkey Trail",
-			    "city":"Amherst",
-			    "state":"WI",
-			    "zip":54406,
-			    "team":"Green Bay",
-			    "type":"Sales"
-  			}];
-
-			var locationList=[{"lat":44.2357938,"lon":-88.4239336},
-			{"lat":44.265963,"lon":-88.395845},
-			{"lat":44.247456,"lon":-88.370005},
-			{"lat":44.4439691,"lon":-89.3185814}];
-
-			var timeSlot=["12:30:00 PM","3:30:00 PM","6:30:00 PM"];
-			for(var slot=0; slot<3; slot++){
-				for (var k=0; k< nTotal; k++)
+				Employee.find({type: "Salesperson"}, function(err, employees)
 				{
-					console.log(appointments[k]);
-					if(appointments[k]["Start Time"]==timeSlot[slot]){
-						aList.append(appointments[k]);
-						geocodingresults.find({"address":appointments[k]["address"]},function(err,data){
-							locationList.append(data["coord"]);
-							
-							
-						})
-						count+=1;
-					}
-					if(count>=nSalespeople)
-						break;
-				}
-				while(count<nSalespeople){
-					aList.append("NON");
-					locationList.append({"lat":0,"lon":0})
-				}
-				count=0;
-			}
-			
-			
-			
+					//console.log(geocodes);
 
-			// distance matrix
-			var distanceMatrix = new Array(nTotal);
-		  	for (var i = 0; i < nTotal; i++)
-		  	{
-		    	distanceMatrix[i] = new Array(nTotal);
-		  	}
+					// add a check right here if the optimized routes are already in the database?
+					// then don't run the algorithm
 
-		  	// fill distance matrix with garbage
-		  	for (var i = 0; i < nTotal; i++)
-		  	{
-		  		// half of the matrix is same as the other half
-		  		for (var j = 0; j <= i; j++)
-		  		{
-		  			if (i == j)
-		  			{
-		  				// nodes distance to itself is 0
-		  				distanceMatrix[i][j] = 0;
-		  			}
-		  			else
-		  			{
-		  				// this is where we will call calculateDistance
-		  				var dist = calculateDistance(locationList[i]["lat"],locationList[j]["lat"],locationList[i]["lon"],locationList[j]["lon"]);
-		  				distanceMatrix[i][j] = dist;
-		  				distanceMatrix[j][i] = dist;
-		  			}
-		  			console.log(dist)
-		  		}
-		  	}
+					// run algorithm
 
-			var visited = new Array(nAppointments); // only need to mark customer nodes as visited
-			for (var i = 0; i < nAppointments; i++)
-			{
-				visited[i] = false; // nothing is visited
-			}
+					// there will be a separate task for calculating the distance matrix..
+					// just hard code it for now
+					// this is old stuff
+					//var homeAddresses=[[41.87355847,-87.79641662],[41.98512347,-87.65592603],[ 41.75050329,-87.69003923],[41.74313511, -87.64126162][41.98124939,-87.61216696],[41.77933782,-87.77089982]];
+					//var appointments=[[[ 41.95304104, -87.66079453 ],[41.90056597,-87.4538938],[41.85340177, -87.51506404],[41.81984669,-87.52693874],[ 41.95472842,-87.7796233],[41.97387503,-87.58250468]],
+					//[[ 41.80242171,-87.47432295],[41.87915987,-87.61111856],[41.8855845,-87.55396771],[41.94003661,-87.45577421],[41.78695588,-87.67820154],[41.86954838,-87.65298139]],
+					//[[41.77982066,-87.66223627],[41.89893941, -87.61800847],[41.82592984,-87.76200356],[41.98791955,-87.5361794],[41.81677539,-87.64333341],[41.9154257,-87.69469442]]];
+					//var officeAddress=[41.86928379,-87.5629177];
 
-			// for each time slot
-			for(var appointment=0; appointment < 3; appointment++)
-			{
-				// for each salesman
-				for(var salesperson = 0; salesperson < nSalespeople; salesperson++)
-				{
-					// translate to location in distance matrix
-					var translatedSalespersonIdx = salesperson + 1;
-					
-					// origin does not need translated
-					var origin = salespersonLocation[salesperson];//from last point
-					var minDistance = Infinity;
-					var bestDest = null;
-					var bestTranslatedDest = null;
-					
-					// for each customer destination
-					for(var dest = 0; dest < nAppointments; dest++)
+					// assume n salespeople and m customers
+					// the first n rows of the sales
+					// I am using a full distance matrix because im pretty sure thats how a real non-greedy algorithm would work.
+					// and I don't care if it is more inefficient
+
+					var nSalespeople = 3;
+					var nAppointments = appointments.length;
+					var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
+
+					var count=0;
+					var aList=[{
+						"name":"GreenBay office",
+						"address":"1125 Tuckaway Ln, Menasha, WI 54952",
+						"coord":{"lat":44.2357938,"lon":-88.4239336}
+					},
 					{
-						// translate to location in distance matrix
-						var translatedDestIdx = dest + nSalespeople + 1;
-						// get distance from distance matrix
-						distance = distanceMatrix[translatedSalespersonIdx][translatedDestIdx];
-						if (distance < minDistance && !visited[dest])
+				    "name":"Hinkley, Elizabeth A.",
+				    "address":"506 N. Center St",
+				    "city":"Appleton",
+				    "state":"WI",
+				    "zip":54911,
+				    "team":"Green Bay",
+				    "type":"Salesperson",
+				    "coord":{"lat":44.265963,"lon":-88.395845}
+					},
+					{
+				    "name":"Romnek, Michael E.",
+				    "address":"2400 E John St",
+				    "city":"Appleton",
+				    "state":"WI",
+				    "zip":54915,
+				    "team":"Green Bay",
+				    "type":"Salesperson",
+				    "coord":{"lat":44.247456,"lon":-88.370005}
+					},
+					{
+				    "name":"Stratton, Erik D.",
+				    "address":"4715 Turkey Trail",
+				    "city":"Amherst",
+				    "state":"WI",
+				    "zip":54406,
+				    "team":"Green Bay",
+				    "type":"Salesperson",
+				    "coord":{"lat":44.4439691,"lon":-89.3185814}
+		  		}];
+
+		  		// insert coords into the appointments array
+		  		// push into aList array
+					for (i = 0; i < appointments.length; i++)
+					{
+						var address = appointments[i]["Job Site"];
+						// find the geocoded address for this appointment
+						var found = false;
+						for (var j = 0; j < geocodes.length; j++)
 						{
-							minDistance = distance;
-							bestTranslatedDest = translatedDestIdx;
-							bestDest = dest;
+							if (geocodes[j]["address"] == address)
+							{
+								console.log("geocode found for this address");
+								appointments[i]["coord"] = geocodes[j]["coord"];
+								aList.push(appointments[i]);
+								break;
+							}
+						}
+						if (!found) {
+							// possibly geocode the address now?
+							console.log("no geocode found for this address... something is terribly wrong!");
 						}
 					}
 
-					if (bestTranslatedDest) {
-						routes[salesperson].push(bestTranslatedDest);
-						visited[bestDest] = true;
-						salespersonLocation[salesperson] = bestTranslatedDest;
-					}
-					else 
+					// initialize stuff needed for algorithm
+					// office is node 0
+					// saleperson homes are nodes 1 -> n + 1
+					// customer locations are nodes n + 1 -> n + 1 + m
+					var salespersonLocation = new Array(nSalespeople);
+					var routes=new Array(nSalespeople);
+					for(var i = 0; i < nSalespeople; i++)
 					{
-						console.log("something went wrong: ", bestDest);
+						routes[i]=new Array();
+						routes[i].push(0);
+						salespersonLocation[i] = 0; // the starting point is the office
 					}
-				}
-			}
 
-			// append salesperson home to the route
-			for (var i = 0; i < nSalespeople; i++)
-			{
-				routes[i].push(i+1);
-			}
+					//an array of all man and address & location 
+					var timeSlot=["12:30:00 PM","3:30:00 PM","6:30:00 PM"];
+					for(var slot=0; slot<3; slot++){
+						for (var k=0; k < nAppointments; k++)
+						{
+							//console.log(appointments[k]);
+							if(appointments[k]["Start Time"]==timeSlot[slot]){
+								count += 1;
+							}
+							if(count>=nSalespeople)
+							{
+								// notify the user that we don't have enough salespeople
+								console.log("throw an error here, not enough salespeople for the number of appointments");
+								break;
+							}
+						}
+						if (count<nSalespeople)
+						{
+							// change the time slot to false so we know that there wasn't enough appointments for all salespeople for this time slot
+							// or that there were constraints so
+							timeSlot[slot] = false;
+						}
+						count=0;
+					}
 
-			console.log(routes)
+					// distance matrix
+					console.log("distance matrix starting");
 
-			// return json blob of routes
+					var distanceMatrix = new Array(nTotal);
+			  	for (var i = 0; i < nTotal; i++)
+			  	{
+			    	distanceMatrix[i] = new Array(nTotal);
+			  	}
+
+			  	// fill distance matrix with garbage
+			  	for (var i = 0; i < nTotal; i++)
+			  	{
+			  		// half of the matrix is same as the other half
+			  		for (var j = 0; j <= i; j++)
+			  		{
+			  			if (i == j)
+			  			{
+			  				// nodes distance to itself is 0
+			  				distanceMatrix[i][j] = 0;
+			  			}
+			  			else
+			  			{
+			  				// this is where we will call calculateDistance
+			  				var dist = calculateDistance(aList[i]["coord"]["lat"],
+			  																		 aList[j]["coord"]["lat"],
+			  																		 aList[i]["coord"]["lon"],
+			  																		 aList[j]["coord"]["lon"]);
+			  				distanceMatrix[i][j] = dist;
+			  				distanceMatrix[j][i] = dist;
+			  			}
+			  			
+			  		}
+			  	}
+			  	console.log("distance matrix finished");
+
+					var visited = new Array(nAppointments); // only need to mark customer nodes as visited
+					for (var i = 0; i < nAppointments; i++)
+					{
+						visited[i] = false; // nothing is visited
+					}
+
+					// for each time slot
+					for(var appointment=0; appointment < 3; appointment++)
+					{
+						// for each salesman
+						for(var salesperson = 0; salesperson < nSalespeople; salesperson++)
+						{
+							// translate to location in distance matrix
+							var translatedSalespersonIdx = salesperson + 1;
+							
+							// origin does not need translated
+							var origin = salespersonLocation[salesperson];//from last point
+							var minDistance = Infinity;
+							var bestDest = null;
+							var bestTranslatedDest = null;
+							
+							// for each customer destination
+							for(var dest = 0; dest < nAppointments; dest++)
+							{
+								// translate to location in distance matrix
+								var translatedDestIdx = dest + nSalespeople + 1;
+								// get distance from distance matrix
+								distance = distanceMatrix[translatedSalespersonIdx][translatedDestIdx];
+								if (distance < minDistance && !visited[dest])
+								{
+									minDistance = distance;
+									bestTranslatedDest = translatedDestIdx;
+									bestDest = dest;
+								}
+							}
+
+							if (bestTranslatedDest) {
+								routes[salesperson].push(bestTranslatedDest);
+								routes[salesperson].push
+								visited[bestDest] = true;
+								salespersonLocation[salesperson] = bestTranslatedDest;
+							}
+							else 
+							{
+								console.log("something went wrong: ", bestDest);
+							}
+						}
+					}
+
+					// append salesperson home to the route
+					for (var i = 0; i < nSalespeople; i++)
+					{
+						routes[i].push(i+1);
+					}
+
+					console.log(routes)
+
+				// return json blob of routes
+				});
+			});
 		});
-		
-
-	})
+	});
 
 	app.post('/api/salesAppts', function(req, res) {
 		SalesAppointment.create({
