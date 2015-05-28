@@ -2,6 +2,10 @@ var Employee = require('./models/employee');
 var SalesAppointment = require('./models/salesModel');
 var Geocode = require('./models/geoCoding');
 
+Geocode.find({}, function(err, data) {
+			console.log(data);
+		});
+
 var EARTH_RADIUS = 6378137.0;
 
 
@@ -99,8 +103,9 @@ module.exports = function(app) {
 		});
 	});
 
-	app.get('/api/geocode', function(req, res) {
-		Geocode.find({address : req.body.address}, function(err, data) {
+	app.get('/api/geocode/:address', function(req, res) {
+		var address = req.params.address;
+		Geocode.find({'address' : address}, function(err, data) {
 			if (err)
 				res.send(err);
 			res.json(data);
@@ -114,6 +119,7 @@ module.exports = function(app) {
 		}, function(err, geocode) {
 			if (err)
 				res.send(err);
+			res.end("successful geocode create");
 		});
 	});
 
@@ -251,6 +257,17 @@ module.exports = function(app) {
 
 	})
 
+	app.post('/api/salesAppts', function(req, res) {
+		SalesAppointment.create({
+			Appointments: req.body,
+			ApptDate: "05/23/2015"
+		}, function(err, employee) {
+			if (err)
+				res.send(err);
+
+			res.end("successfully created sales appointments");
+		});
+	});
 
 
 	// application -------------------------------------------------------------

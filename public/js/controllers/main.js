@@ -18,6 +18,14 @@ RouteOpt.service('EmployeesService', ['$http',function($http) {
 			return $http.delete('/api/employees/' + id);
 		};
 
+		this.postGeocode = function(data) {
+			return $http.post('/api/geocode', data);
+		};
+
+		this.getGeocode = function(address) {
+			return $http.get('/api/geocode/' + address);
+		};
+
 		this.getAppointments = function() {
 			return $http.get('/api/appointments');
 		};
@@ -60,9 +68,6 @@ RouteOpt.controller('addEmployeeController', function($scope, $window, Employees
 	});
 
 RouteOpt.controller('algorithmController', function($scope, $window, EmployeesService) {
-
-			var geocoder = new google.maps.Geocoder();
-			var Locations = [];
 			
 			$scope.computing = false;
 			$scope.test = function() {
@@ -80,36 +85,7 @@ RouteOpt.controller('algorithmController', function($scope, $window, EmployeesSe
 					});
 			}
 
-
 			
-
-			$scope.codeAddress = function(address) {
-				console.log("Calling geocoder...");
-				geocoder.geocode({ 'address': address}, function(results, status){
-					if (status == google.maps.GeocoderStatus.OK){
-						console.log("Geocoding success!");
-						Locations.push(results[0].geometry.location);
-						console.log(Locations);
-					}
-					else{
-						alert('Geocode failed because: ' + status);
-					}
-				});
-			}
-
-			$scope.codeAppointmentsByType = function (AType) {
-				EmployeesService.getAppointments()
-					.success(function(data, status, headers, config){
-						var Addresses = [];
-						for(var i = 0; i < data.length; i++){
-							if(data[i].type == AType)
-								$scope.codeAddress(data[i].address);
-						}
-					})
-					.error(function(data, status, headers, config){
-						console.log("Error occurred fetching appointments: " + status);
-					});
-			}
 	});
 
 RouteOpt.controller('DisplayEmployeeController', function($scope, $window, EmployeesService) {
@@ -139,65 +115,146 @@ RouteOpt.controller('DisplayEmployeeController', function($scope, $window, Emplo
 	  
 	});
 
-RouteOpt.controller('uploadController', function($scope, $rootScope, Appointments) {
+RouteOpt.controller('uploadController', function($scope, $rootScope, Appointments, EmployeesService) {
 
+	var geocoder = new google.maps.Geocoder();
+	var Locations = [];
+
+	$scope.uploadFile = "";
 	
-		$scope.uploadFile = "";
-		
-		$scope.fileType = "sales";
-		$scope.uploading = false;
-		$scope.uploadingComplete=false;
+	$scope.fileType = "sales";
+	$scope.uploading = false;
+	$scope.uploadingComplete=false;
 
-		$scope.csvJSON = function(csv){
-			$scope.uploading=true; 
+	$scope.csvJSON = function(csv){
+		$scope.uploading=true; 
+
+		var reader = new FileReader();
+
+		reader.onload = function(evt) {
+			console.log("parse started");
 		  
-			var reader = new FileReader();
+		  var csv = this.result;
+		  console.log(csv);
+		  var lines = csv.split("\n");
 
-			reader.onload = function(evt) {
-				console.log("parse started");
+		  var result = [];
+		 
+		  var headers = lines[0].match(/(?:[^,"\r]+|"[^"]*")+/g);
+			
+		  console.log(headers);			 	
+
+		  for(var i=1;i<lines.length;i++){
+		 
+			  var obj = {};
 			  
-			  var csv = this.result;
-			  console.log(csv);
-			  var lines = csv.split("\n");
- 
-			  var result = [];
-			 
-			  var headers = lines[0].match(/(?:[^,"\r]+|"[^"]*")+/g);
-				
-			  console.log(headers);			 	
-
-			  for(var i=1;i<lines.length;i++){
-			 
-				  var obj = {};
-				  
-				  var currentline=lines[i].match(/(?:[^,"\r]+|"[^"]*")+/g);				
-			 
-				  if(currentline != null) {
-					  for(var j=0;j<headers.length;j++){
-						  obj[headers[j]] = currentline[j];
-					  }					
-			 
-				  	result.push(obj);
-				  }
-			 
+			  var currentline=lines[i].match(/(?:[^,"\r]+|"[^"]*")+/g);				
+		 
+			  if(currentline != null) {
+				  for(var j=0;j<headers.length;j++){
+					  obj[headers[j]] = currentline[j];
+				  }					
+		 
+			  	result.push(obj);
 			  }
-			  
-			  Appointments.addSales(JSON.stringify(result));
+		 
+		  }
+		  var i=0;
+		  var address;
+		  function storeGeo(){
+		  	address=result[i]['Job Site'];	
+		  	i++;	  	
+		  	EmployeesService.getGeocode(address)
+					.success(function(data, status, headers, config) {
+						// if nothing was returned, geocode the address
+						console.log(data);
+						if (!data.length)
+						{
+							console.log("no geocode for this address found in database")
+							$scope.codeAddress(address);
+						}
+						else
+						{
+							console.log("found this address");
+						}
+						
+						if(i<result.length)
+						{
 
-			  //return result; //JavaScript object
-			  console.log(JSON.stringify(result)); //JSON
+							setTimeout(storeGeo,1000);
 
-			  console.log("finished parsing");		
-			  $scope.uploading = false;
-			  $scope.uploadingComplete = true;	  
-			  
-			}
+						}
+					})
+					.error(function(data, status, headers, config) {
+					    console.log("an error occurred looking for geocoded address");
+					});	
+			
+		  }
+		  storeGeo();
+		  /*
+		  for (var i = 0; i < result.length; i++) { 
+		  	var address = result[i]['Job Site'];
 
-			reader.readAsText($scope.uploadFile);
-
+		  	// check if we have already geocoded this address
+		  	EmployeesService.getGeocode(address)
+					.success(function(data, status, headers, config) {
+						// if nothing was returned, geocode the address
+						console.log(data);
+						if (!data.length)
+						{
+							console.log("no geocode for this address found in database")
+							setTimeout($scope.codeAddress(address), 200);
+						}
+					})
+					.error(function(data, status, headers, config) {
+					    console.log("an error occurred looking for geocoded address");
+					});	
+		  }
+		  */
+		  
+		  Appointments.addSales(JSON.stringify(result));
+		  console.log("finished parsing");			  
 		}
 
-			
+		reader.readAsText($scope.uploadFile);
+
+		$scope.uploading = false;
+		$scope.uploadingComplete = true;	
+	}
+
+	$scope.codeAddress = function(address) {
+			console.log("Calling geocoder...");
+			geocoder.geocode({ 'address': address}, function(results, status)
+			{
+				if (status == google.maps.GeocoderStatus.OK)
+				{
+					console.log("Geocoding success!");
+
+					EmployeesService.postGeocode({
+						'address': address,
+						'coord' : {lat: results[0].geometry.location.A, lon: results[0].geometry.location.F}
+					});
+				}
+				else
+				{
+					alert('Geocode failed because: ' + status);
+				}
+			});
+		}
+
+		$scope.codeAppointmentsByType = function (AType) {
+			EmployeesService.getAppointments()
+				.success(function(data, status, headers, config){
+					var Addresses = [];
+					for(var i = 0; i < data.length; i++){
+						if(data[i].type == AType)
+							$scope.codeAddress(data[i].address);
+					}
+				})
+				.error(function(data, status, headers, config){
+					console.log("Error occurred fetching appointments: " + status);
+				});
+		}
 	});
 
 
