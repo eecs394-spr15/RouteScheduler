@@ -17,4 +17,4 @@ var routesSchema = new mongoose.Schema({
   routeDate: { type: Date }
 });
 
-module.exports = mongoose.model('Appointment', appointmentSchema);
+module.exports = mongoose.model('Route', routesSchema);

@@ -1,8 +1,13 @@
 var Employee = require('./models/employee');
 var SalesAppointment = require('./models/salesModel');
 var Geocode = require('./models/geoCoding');
+var OptimizedRoutes = require('./models/route');
 
 var EARTH_RADIUS = 6378137.0;
+
+OptimizedRoutes.find({}, function(err, data) {
+	console.log(data);
+})
 
 
 var getRad = function(d){
@@ -96,8 +101,8 @@ module.exports = function(app) {
 
 	app.get('/api/salesperson-routes', function(req, res) {
 		var d=new Date();
-
-	 	SalesAppointment.find({ApptDate: d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)},function(err, data)
+		var date = d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)
+	 	SalesAppointment.find({ApptDate: date},function(err, data)
 	 	{
 			var appointments=data[0].Appointments;
 			console.log(appointments);
@@ -198,9 +203,14 @@ module.exports = function(app) {
 					var routes=new Array(nSalespeople);
 					for(var i = 0; i < nSalespeople; i++)
 					{
-						routes[i]=new Array();
-						routes[i].push(0);
-						salespersonLocation[i] = 0; // the starting point is the office
+						routes[i]={};
+						routes[i]["employee"] = aList[i+1];
+						routes[i]["routeDate"] = date;
+						routes[i]["appointmentList"] = [];
+
+						// the starting point is the office
+						routes[i]["appointmentList"].push(aList[0]);
+						salespersonLocation[i] = 0;
 					}
 
 					//an array of all man and address & location 
@@ -223,7 +233,7 @@ module.exports = function(app) {
 						{
 							// change the time slot to false so we know that there wasn't enough appointments for all salespeople for this time slot
 							// or that there were constraints so
-							timeSlot[slot] = false;
+							// timeSlot[slot] = false;
 						}
 						count=0;
 					}
@@ -291,7 +301,8 @@ module.exports = function(app) {
 								var translatedDestIdx = dest + nSalespeople + 1;
 								// get distance from distance matrix
 								distance = distanceMatrix[translatedSalespersonIdx][translatedDestIdx];
-								if (distance < minDistance && !visited[dest])
+								var time = aList[translatedDestIdx]["Start Time"];
+								if (distance < minDistance && !visited[dest] && timeSlot[appointment] == time)
 								{
 									minDistance = distance;
 									bestTranslatedDest = translatedDestIdx;
@@ -300,8 +311,7 @@ module.exports = function(app) {
 							}
 
 							if (bestTranslatedDest) {
-								routes[salesperson].push(bestTranslatedDest);
-								routes[salesperson].push
+								routes[salesperson]["appointmentList"].push(aList[bestTranslatedDest]);
 								visited[bestDest] = true;
 								salespersonLocation[salesperson] = bestTranslatedDest;
 							}
@@ -315,10 +325,13 @@ module.exports = function(app) {
 					// append salesperson home to the route
 					for (var i = 0; i < nSalespeople; i++)
 					{
-						routes[i].push(i+1);
+						routes[i]["appointmentList"].push(aList[i+1]);
+						OptimizedRoutes.create(routes[i], function(err, employee) {
+							if (err)
+								res.send(err);
+						});
 					}
 
-					console.log(routes)
 
 				// return json blob of routes
 				});
