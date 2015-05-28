@@ -225,7 +225,55 @@ RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope, Appoint
 	
 });
 
+RouteOpt.controller('viewResultsCtrl', function($scope, Appointments) {
+	$scope.optimizedRoutes = [
+		{employee: {name: "Jim Rizzi",
+								address: "1234 Chicago Ave", 
+								type: "Sales"}, 
+			appointmentList:[764563, 764998], 
+			team: "North",
+			routeDate: "5/26/2015"},
+			{employee: {name: "Marco Nieves",
+								address: "1234 Michigan Ave", 
+								type: "Sales"}, 
+			appointmentList: [764691, 764312, 764158], 
+			team: "North",
+			routeDate: "5/26/2015"},
+			{employee: {name: "Rob Coleman",
+								address: "1234 Chicago Ave", 
+								type: "Sales"}, 
+			appointmentList: [764659, 765031], 
+			team: "North",
+			routeDate: "5/26/2015"}];
+	$scope.findApptDetails = function(ids){
+		//Whoever connects this to the backend should make a query to get the appointment
+		//data based on the id
 
+		$scope.employeeAppts = [{
+		    "Appt Id":764563,
+		    "Start Time":"6:30:00 PM",
+		    "End Time":"9:30:00 PM",
+		    "Opportunity #":"OPP1285439",
+		    "Customer Name":"John Doe",
+		    "Job Site":"1020 E Nichols RdUnit 4, Palatine, IL, 60074"
+		  },
+			{
+		    "Appt Id":764998,
+		    "Start Time":"12:30:00 PM",
+		    "End Time":"3:30:00 PM",
+		    "Opportunity #":"OPP1285686",
+		    "Customer Name":"John Doe",
+		    "Job Site":"1424 W Berwyn Ave2nd Floor, Chicago, IL, 60640"
+		  }];
+
+		return $scope.employeeAppts;
+		
+	}
+});
+
+
+
+//This is needed to get the file name from the form input
 RouteOpt.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
