@@ -53,3 +53,10 @@ input {
   
   }
 
+.file-input {
+  padding-left:0px;
+}
+
+.alert-text {
+  color:#d9534f;
+}

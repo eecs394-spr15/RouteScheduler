@@ -64,16 +64,19 @@ RouteOpt.controller('algorithmController', function($scope, $window, EmployeesSe
 			var geocoder = new google.maps.Geocoder();
 			var Locations = [];
 			
-
+			$scope.computing = false;
 			$scope.test = function() {
-				
+				$scope.computing=true;
+
 
 				EmployeesService.getOptimizedSalespersonRoutes()
 					.success(function(data, status, headers, config){
 						console.log(data);
+						$scope.computing = false;
 					})
 					.error(function(data, status, headers, config){
 						console.log("Error getting optimized salesperson routes" + status);
+						$scope.computing = false;
 					});
 			}
 
@@ -142,8 +145,11 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 		$scope.uploadFile = "";
 		
 		$scope.fileType = "sales";
+		$scope.uploading = false;
+		$scope.uploadingComplete=false;
 
-		$scope.csvJSON = function(csv){ 
+		$scope.csvJSON = function(csv){
+			$scope.uploading=true; 
 		  
 			var reader = new FileReader();
 
@@ -181,7 +187,9 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 			  //return result; //JavaScript object
 			  console.log(JSON.stringify(result)); //JSON
 
-			  console.log("finished parsing");			  
+			  console.log("finished parsing");		
+			  $scope.uploading = false;
+			  $scope.uploadingComplete = true;	  
 			  
 			}
 

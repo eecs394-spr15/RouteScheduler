@@ -5,15 +5,23 @@
 		<h1 >Upload Today's Appointments</h1>
 	</div>
 	<form class="form-inline" id="uploadForm">			
-		<input type="file" class="file-input " id = "fileN" file-model="uploadFile">
+		<input type="file" class="file-input btn-lg" id = "fileN" file-model="uploadFile">
 		<label  class = "first-radio">
 			<input type="radio" ng-model= "fileType" value="sales" checked>Sales Appointments	
 		</label>
 		<label>
 			<input type="radio"  ng-model="fileType" value="technician">Technician Appointments
 		</label>
-		<br>
-		<button type="submit" class="btn upload-button" ng-click = "csvJSON()">Upload</button>
-	</form>		
+		<br>	
+		<div class=form-group>	
+			<button type="submit" class="btn btn-lg" ng-click = "csvJSON()">Upload</button>
+			<label ng-show="uploading" class = "alert-text">
+				Uploading...
+			</label>
+			<label ng-show="uploadingComplete" class = "alert-text">
+				Upload Complete! Click "Appointments" to view.
+			</label>		
+		</div>
+	</form>	
 </div>
 <% include footer %>
