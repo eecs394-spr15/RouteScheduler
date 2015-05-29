@@ -5,12 +5,16 @@
     <h1>Add new employee</h1>
     <form novalidate>
       <div class="form-group">
-        <label for="name">Name</label>
-        <input ng-model="employee.name" type="name" class="form-control" id="name" placeholder="Enter name">
+        <label for="add-name">Name</label>
+        <input ng-model="employee.name" type="name" class="form-control" id="add-name" placeholder="Enter name">
       </div>
       <div class="form-group">
         <label for="address">Address</label>
         <input ng-model="employee.address" type="name" class="form-control" id="address" placeholder="Enter address">
+      </div>
+      <div class="form-group">
+        <label for="id">ID</label>
+        <input ng-model="employee._id" type="name" class="form-control" id="id" placeholder="Enter ID">
       </div>
       <div class="form-group">
         <label for="type">Type</label>
@@ -28,8 +32,10 @@
         </div>
       </div>
       <input ng-click="create(employee)" type="submit" class="btn btn-default" value="Add employee">
+      <input ng-click="remove(employee._id)" type="submit" class="btn btn-default" value="Delete employee by ID">
+
     </form>
-    <button ng-click="test()">test</button>
+
   </div>
 </div>
 

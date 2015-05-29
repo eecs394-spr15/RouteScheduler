@@ -62,30 +62,18 @@ RouteOpt.controller('addEmployeeController', function($scope, $window, Employees
 				type: employee.type
 			});
 			alert("Employee successfully added. Redirecting to main page.");
-			$window.location.assign("/");
+			$window.location.assign("/employees");
 
-		}
-	});
+		};
+		$scope.remove = function(id) {
+			EmployeesService.delete({
+				id: id
+			});
+			alert("Employee successfully deleted. Redirecting to main page.");
+			$window.location.assign("/employees");
 
-RouteOpt.controller('algorithmController', function($scope, $window, EmployeesService) {
-			
-			$scope.computing = false;
-			$scope.test = function() {
-				$scope.computing=true;
+		};
 
-
-				EmployeesService.getOptimizedSalespersonRoutes()
-					.success(function(data, status, headers, config){
-						console.log(data);
-						$scope.computing = false;
-					})
-					.error(function(data, status, headers, config){
-						console.log("Error getting optimized salesperson routes" + status);
-						$scope.computing = false;
-					});
-			}
-
-			
 	});
 
 RouteOpt.controller('DisplayEmployeeController', function($scope, $window, EmployeesService) {
@@ -110,10 +98,48 @@ RouteOpt.controller('DisplayEmployeeController', function($scope, $window, Emplo
 			});
 
 		};
+
+
+		$scope.remove = function(id) {
+			EmployeesService.delete().
+  			success(function(data, status, headers, config) {
+			    console.log(data);
+			    alert("Employee successfully deleted. Redirecting to main page.");
+				$window.location.assign("/employees");
+			}).
+			error(function(data, status, headers, config) {
+			    console.log("an error occurred fetching employees")
+			});
+
+		};
+
 		
 		
 	  
 	});
+
+
+RouteOpt.controller('algorithmController', function($scope, $window, EmployeesService) {
+			
+			$scope.computing = false;
+			$scope.test = function() {
+				$scope.computing=true;
+
+
+				EmployeesService.getOptimizedSalespersonRoutes()
+					.success(function(data, status, headers, config){
+						console.log(data);
+						$scope.computing = false;
+					})
+					.error(function(data, status, headers, config){
+						console.log("Error getting optimized salesperson routes" + status);
+						$scope.computing = false;
+					});
+			}
+
+			
+	});
+
 
 RouteOpt.controller('uploadController', function($scope, $rootScope, Appointments, EmployeesService) {
 
@@ -293,27 +319,28 @@ RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope, Appoint
 RouteOpt.controller('viewResultsCtrl', function($scope, Appointments) {
 	$scope.optimizedRoutes = [
 		{employee: {name: "Jim Rizzi",
-								address: "1234 Chicago Ave", 
-								type: "Sales"}, 
-			appointmentList:[764563, 764998], 
-			team: "North",
-			routeDate: "5/26/2015"},
-			{employee: {name: "Marco Nieves",
-								address: "1234 Michigan Ave", 
-								type: "Sales"}, 
-			appointmentList: [764691, 764312, 764158], 
-			team: "North",
-			routeDate: "5/26/2015"},
-			{employee: {name: "Rob Coleman",
-								address: "1234 Chicago Ave", 
-								type: "Sales"}, 
-			appointmentList: [764659, 765031], 
-			team: "North",
-			routeDate: "5/26/2015"}];
+					address: "1234 Chicago Ave", 
+					type: "Sales"}, 
+					appointmentList:[764563, 764998], 
+					team: "North",
+					routeDate: "5/26/2015"},
+		{employee: {name: "Marco Nieves",
+					address: "1234 Michigan Ave", 
+					type: "Sales"}, 
+					appointmentList: [764691, 764312, 764158], 
+					team: "North",
+					routeDate: "5/26/2015"},
+		{employee: {name: "Rob Coleman",
+					address: "1234 Chicago Ave", 
+					type: "Sales"}, 
+					appointmentList: [764659, 765031], 
+					team: "North",
+					routeDate: "5/26/2015"}
+	];
 	$scope.findApptDetails = function(ids){
 		//Whoever connects this to the backend should make a query to get the appointment
 		//data based on the id
-		
+
 		$scope.employeeAppts = [{
 		    "Appt Id":764563,
 		    "Start Time":"6:30:00 PM",

@@ -1,24 +1,27 @@
 <% include header %>
 
 <div ng-controller='DisplayEmployeeController'>
+  <div ng-controller='addEmployeeController'>
 
-  <div class="container">
-    <h1> Employees </h1>
+    <div class="container">
+      <h1> Employees </h1>
 
-    <form action="/manage">
-        <input type="submit" value="Add Employee">
-    </form>
+      <form action="/manage">
+          <input type="submit" value="Manage Employee">
+      </form>
 
-    <ul class="list-group">
-      <li class="list-group-item" ng-repeat="stuff in view">
-        <b>{{stuff.name}}</b>
-        <div class="text-muted">{{stuff.type}}</div>
-        <div class="text-muted">{{stuff.address}}</div>
-      </li>
-    </ul>
-    
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="stuff in view">
+          <b>{{stuff.name}}</b>
+          <div class="text-muted">{{stuff._id}}</div>
+          <div class="text-muted">{{stuff.type}}</div>
+          <div class="text-muted">{{stuff.address}}</div> 
+          <input ng-click="remove(stuff._id)" type="submit" class="btn btn-default" value="Delete employee by ID">    
+          </li>
+      </ul>
+      
+    </div>
   </div>
-
 </div>
 
 <% include footer %>

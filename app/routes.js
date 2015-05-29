@@ -70,6 +70,15 @@ module.exports = function(app) {
 
 	});
 
+	app.delete('/api/employees/:_id', function(req, res) {
+		Employee.remove({
+			_id : req.params._id
+		}, function(err, employee) {
+			if (err)
+				res.send(err);
+		});
+	});
+
  	app.get('/api/salesAppts', function(req, res) {
 
 	    var d=new Date();
