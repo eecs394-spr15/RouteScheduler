@@ -4,6 +4,7 @@ var Geocode = require('./models/geoCoding');
 var OptimizedRoutes = require('./models/route');
 
 var EARTH_RADIUS = 6378137.0;
+var geocoder = new google.maps.Geocoder();
 
 OptimizedRoutes.find({}, function(err, data) {
 	console.log(data);
@@ -42,6 +43,25 @@ var calculateDistance = function(lat1,lat2,lng1,lng2) {
     h2 = (3*r +1)/2/s;
     
     return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
+}
+
+var codeAddress = function(addr){
+	geocoder.geocode({ 'address': addr}, function(results, status)
+			{
+				if (status == google.maps.GeocoderStatus.OK)
+				{
+					console.log("Geocoding success!");
+
+					Geocode.create({
+						address : addr,
+						coord: {lat: results[0].geometry.location.A, lon: results[0].geometry.location.f}
+					});
+				}
+				else
+				{
+					alert('Geocode failed because: ' + status);
+				}
+			});
 }
 
 module.exports = function(app) {
@@ -131,6 +151,7 @@ module.exports = function(app) {
 					// I am using a full distance matrix because im pretty sure thats how a real non-greedy algorithm would work.
 					// and I don't care if it is more inefficient
 
+					/*
 					var nSalespeople = 3;
 					var nAppointments = appointments.length;
 					var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
@@ -171,9 +192,38 @@ module.exports = function(app) {
 				    "type":"Salesperson",
 				    "coord":{"lat":44.4439691,"lon":-89.3185814}
 		  		}];
+		  		*/
 
-		  		// insert coords into the appointments array
-		  		// push into aList array
+		  			//check if employees' address are geocoded, if not, geocode them
+		  			//Store geocode data in EmployeeLocs array
+		  			var AddressesToFetch = [];
+		  			var EmployeeLocs = [];
+		  			for(i = 0; i < employees.length; i++){
+		  				Geocode.find({'address' : employees[i].address}, function(err, data) {
+							if(!data.length){
+								console.log("No geocode found for employee address");
+								codeAddress(employees[i].address);
+								AddressesToFetch.push(employees[i].address);
+							}
+							else{
+								EmployeeLocs.push(data[0].coord);
+							}
+						});
+		  			}
+		  			while(AddressesToFetch.length > 0){
+			  			for(i = 0; i < AddressesToFetch.length; i++){
+			  				Geocode.find({'address' : AddressesToFetch[i]}, function(err, data) {
+								if(!data.length)
+									console.log("Still missing geocode for employee address")
+								else{
+									EmployeeLocs.push(data[0].coord);
+									AddressesToFetch.splice(i, 1);
+								}
+							});
+			  			}}
+
+			  		// insert coords into the appointments array
+			  		// push into aList array
 					for (i = 0; i < appointments.length; i++)
 					{
 						var address = appointments[i]["Job Site"];
