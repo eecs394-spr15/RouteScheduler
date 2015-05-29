@@ -66,9 +66,7 @@ RouteOpt.controller('addEmployeeController', function($scope, $window, Employees
 
 		};
 		$scope.remove = function(id) {
-			EmployeesService.delete({
-				id: id
-			});
+			EmployeesService.delete(id);
 			alert("Employee successfully deleted. Redirecting to main page.");
 			$window.location.assign("/employees");
 
