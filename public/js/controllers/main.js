@@ -356,7 +356,13 @@ RouteOpt.controller('viewResultsCtrl', function($scope, Appointments) {
 		    "Job Site":"1424 W Berwyn Ave2nd Floor, Chicago, IL, 60640"
 		  }];
 
-		return $scope.employeeAppts;
+		return $scope.employeeAppts.sort(function (a, b) {
+			if(a['Start Time'] < b['Start Time'])
+				return -1;
+			if(a['Start Time'] > b['Start Time'])
+				return 1;
+			return 0;
+		});
 		
 	}
 });
