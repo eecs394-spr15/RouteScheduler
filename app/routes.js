@@ -408,8 +408,8 @@ module.exports = function(app) {
 						});
 					}
 
-
 				// return json blob of routes
+				res.json(routes);
 				});
 			});
 		});
