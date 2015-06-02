@@ -55,15 +55,37 @@ RouteOpt.factory('Appointments', ['$http',function($http) {
 	}]);
 
 RouteOpt.controller('addEmployeeController', function($scope, $window, EmployeesService) {
+	var geocoder = new google.maps.Geocoder();
+		$scope.codeAddress = function(address) {
+			console.log("Calling geocoder...");
+			geocoder.geocode({ 'address': address}, function(results, status)
+			{
+				if (status == google.maps.GeocoderStatus.OK)
+				{
+					console.log("Geocoding success!");
+
+					EmployeesService.postGeocode({
+						'address': address,
+						'coord' : {lat: results[0].geometry.location.A, lon: results[0].geometry.location.F}
+					});
+
+					alert("Employee successfully added. Redirecting to main page.");
+					$window.location.assign("/employees");
+				}
+				else
+				{
+					alert('Geocode failed because: ' + status);
+				}
+			});
+		};
+
 		$scope.create = function(employee) {
 			EmployeesService.create({
 				name: employee.name,
 				address: employee.address,
 				type: employee.type
 			});
-			alert("Employee successfully added. Redirecting to main page.");
-			$window.location.assign("/employees");
-
+			$scope.codeAddress(employee.address);
 		};
 		$scope.remove = function(id) {
 			EmployeesService.delete(id);
