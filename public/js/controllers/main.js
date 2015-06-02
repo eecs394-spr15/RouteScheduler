@@ -54,8 +54,24 @@ RouteOpt.factory('Appointments', ['$http',function($http) {
 		};
 	}]);
 
-RouteOpt.controller('addEmployeeController', function($scope, $window, EmployeesService) {
-	var geocoder = new google.maps.Geocoder();
+RouteOpt.controller('addEmployeeController', function($scope, $window, EmployeesService, Appointments) {
+		var geocoder = new google.maps.Geocoder();
+
+		$scope.create = function(employee) {
+			EmployeesService.create({
+				name: employee.name,
+				address: employee.address,
+				type: employee.type
+			});
+			$scope.codeAddress(employee.address);
+		};
+
+		$scope.remove = function(id) {
+			EmployeesService.delete(id);
+			alert("Employee successfully deleted. Redirecting to employees page.");
+			$window.location.assign("/employees");	
+		}
+
 		$scope.codeAddress = function(address) {
 			console.log("Calling geocoder...");
 			geocoder.geocode({ 'address': address}, function(results, status)
@@ -67,34 +83,37 @@ RouteOpt.controller('addEmployeeController', function($scope, $window, Employees
 					EmployeesService.postGeocode({
 						'address': address,
 						'coord' : {lat: results[0].geometry.location.A, lon: results[0].geometry.location.F}
+					})
+					.success(function(err){
+						alert("Employee successfully added. Redirecting to employees page.");
+						$window.location.assign("/employees");
 					});
-
-					alert("Employee successfully added. Redirecting to main page.");
-					$window.location.assign("/employees");
 				}
 				else
 				{
 					alert('Geocode failed because: ' + status);
 				}
 			});
-		};
-
-		$scope.create = function(employee) {
-			EmployeesService.create({
-				name: employee.name,
-				address: employee.address,
-				type: employee.type
-			});
-			$scope.codeAddress(employee.address);
-		};
-		$scope.remove = function(id) {
-			EmployeesService.delete(id);
-			alert("Employee successfully deleted. Redirecting to main page.");
-			$window.location.assign("/employees");
-
-		};
-
+		}
 	});
+
+RouteOpt.controller('algorithmController', function($scope, $window, EmployeesService) {
+
+	$scope.computing = false;
+	$scope.test = function() {
+		$scope.computing=true;
+
+		EmployeesService.getOptimizedSalespersonRoutes()
+			.success(function(data, status, headers, config){
+				console.log(data);
+				$scope.computing = false;
+			})
+			.error(function(data, status, headers, config){
+				console.log("Error getting optimized salesperson routes" + status);
+				$scope.computing = false;
+			});
+	}
+});
 
 RouteOpt.controller('DisplayEmployeeController', function($scope, $window, EmployeesService) {
 
@@ -267,26 +286,6 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 		$scope.uploading = false;
 		$scope.uploadingComplete = true;	
 	}
-
-	$scope.codeAddress = function(address) {
-			console.log("Calling geocoder...");
-			geocoder.geocode({ 'address': address}, function(results, status)
-			{
-				if (status == google.maps.GeocoderStatus.OK)
-				{
-					console.log("Geocoding success!");
-
-					EmployeesService.postGeocode({
-						'address': address,
-						'coord' : {lat: results[0].geometry.location.A, lon: results[0].geometry.location.F}
-					});
-				}
-				else
-				{
-					alert('Geocode failed because: ' + status);
-				}
-			});
-		}
 
 		$scope.codeAppointmentsByType = function (AType) {
 			EmployeesService.getAppointments()
