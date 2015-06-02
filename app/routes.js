@@ -131,7 +131,7 @@ module.exports = function(app) {
 					// I am using a full distance matrix because im pretty sure thats how a real non-greedy algorithm would work.
 					// and I don't care if it is more inefficient
 
-					var nSalespeople = 3;
+					var nSalespeople = employees.length;
 					var nAppointments = appointments.length;
 					var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
 
@@ -140,37 +140,30 @@ module.exports = function(app) {
 						"name":"GreenBay office",
 						"address":"1125 Tuckaway Ln, Menasha, WI 54952",
 						"coord":{"lat":44.2357938,"lon":-88.4239336}
-					},
+					}];
+
+		  		// insert coords into the employees array
+		  		// push into aList array
+					for (i = 0; i < employees.length; i++)
 					{
-				    "name":"Hinkley, Elizabeth A.",
-				    "address":"506 N. Center St",
-				    "city":"Appleton",
-				    "state":"WI",
-				    "zip":54911,
-				    "team":"Green Bay",
-				    "type":"Salesperson",
-				    "coord":{"lat":44.265963,"lon":-88.395845}
-					},
-					{
-				    "name":"Romnek, Michael E.",
-				    "address":"2400 E John St",
-				    "city":"Appleton",
-				    "state":"WI",
-				    "zip":54915,
-				    "team":"Green Bay",
-				    "type":"Salesperson",
-				    "coord":{"lat":44.247456,"lon":-88.370005}
-					},
-					{
-				    "name":"Stratton, Erik D.",
-				    "address":"4715 Turkey Trail",
-				    "city":"Amherst",
-				    "state":"WI",
-				    "zip":54406,
-				    "team":"Green Bay",
-				    "type":"Salesperson",
-				    "coord":{"lat":44.4439691,"lon":-89.3185814}
-		  		}];
+						var address = employees[i]["address"];
+						// find the geocoded address for this appointment
+						var found = false;
+						for (var j = 0; j < geocodes.length; j++)
+						{
+							if (geocodes[j]["address"] == address)
+							{
+								console.log("geocode found for this address");
+								employees[i]["coord"] = geocodes[j]["coord"];
+								aList.push(employees[i]);
+								break;
+							}
+						}
+						if (!found) {
+							// possibly geocode the address now?
+							console.log("no geocode found for this employee... something is terribly wrong!");
+						}
+					}
 
 		  		// insert coords into the appointments array
 		  		// push into aList array
