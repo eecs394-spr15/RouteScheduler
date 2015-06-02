@@ -161,7 +161,6 @@ module.exports = function(app) {
 							}
 						}
 						if (!found) {
-							// possibly geocode the address now?
 							console.log("no geocode found for this employee... something is terribly wrong!");
 						}
 					}
