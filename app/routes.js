@@ -5,11 +5,6 @@ var OptimizedRoutes = require('./models/route');
 
 var EARTH_RADIUS = 6378137.0;
 
-Geocode.find({}, function(err, data) {
-	console.log(data);
-})
-
-
 var getRad = function(d){
 	return d*Math.PI/180.0;
 }
@@ -103,7 +98,7 @@ module.exports = function(app) {
 	app.get('/api/salesperson-routes', function(req, res) {
 		var d=new Date();
 		var date = d.getFullYear()+"/"+(d.getMonth()+1)+"/"+(d.getDate()-1)
-	 	SalesAppointment.find({ApptDate: date},function(err, data)
+	 	SalesAppointment.find({},function(err, data)
 	 	{
 			var appointments=data[0].Appointments;
 			console.log(appointments);
@@ -111,7 +106,7 @@ module.exports = function(app) {
 			{
 				Employee.find({type: "Salesperson"}, function(err, employees)
 				{
-					//console.log(geocodes);
+					console.log(employees);
 
 					// add a check right here if the optimized routes are already in the database?
 					// then don't run the algorithm
@@ -137,14 +132,66 @@ module.exports = function(app) {
 					var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
 
 					var count=0;
-					var aList=[{
-						"name":"GreenBay office",
+					var aList=[
+					{
+						"name":"GreenBay",
 						"address":"1125 Tuckaway Ln, Menasha, WI 54952",
 						"coord":{"lat":44.2357938,"lon":-88.4239336}
+					},
+					{
+						"name":"Madison",
+						"address":"3037 S. Stoughton Rd, Madison, WI 53716",
+						"coord":{"lat":43.05324,"lon":-89.307581}
+					},
+					{
+						"name":"Milwaukee",
+						"address":"5801 S. Pennsylvania Ave, Cudahy, WI 53110",
+						"coord":{"lat":42.938382,"lon":-87.882969}
+					},
+					{
+						"name":"Peoria",
+						"address":"1401 West Glen, Peoria, IL 61614",
+						"coord":{"lat":40.74777,"lon":-89.613891}
+					},
+					{
+						"name":"Rockford",
+						"address":"4322 Maray Drive, Rockford, IL 61108",
+						"coord":{"lat":44.2357938,"lon":-89.031492}
+					},
+					{
+						"name":"South",
+						"address":"9932 S. Western Avenue, Chicago, IL 60643",
+						"coord":{"lat":41.71269,"lon":-87.68216}
+					},
+					{
+						"name":"North",
+						"address":"125 E. Oakton, Des Plaines, IL 60018",
+						"coord":{"lat":42.022436,"lon":-87.914881}
+					},
+
+
+
+					{
+				    "name":"Hinkley, Elizabeth A.",
+				    "address":"506 N. Center St",
+				    "city":"Appleton",
+				    "state":"WI",
+				    "zip":54911,
+				    "team":"Green Bay",
+				    "type":"Salesperson",
+				    "coord":{"lat":44.265963,"lon":-88.395845}
+					},
+					{
+				    "name":"Romnek, Michael E.",
+				    "address":"2400 E John St",
+				    "city":"Appleton",
+				    "state":"WI",
+				    "zip":54915,
+				    "team":"Green Bay",
+				    "type":"Salesperson",
+				    "coord":{"lat":44.247456,"lon":-88.370005}
 					}];
 
-		  		// insert coords into the employees array
-		  		// push into aList array
 					for (i = 0; i < employees.length; i++)
 					{
 						var address = employees[i]["address"];
@@ -197,12 +244,15 @@ module.exports = function(app) {
 					for(var i = 0; i < nSalespeople; i++)
 					{
 						routes[i]={};
-						routes[i]["employee"] = aList[i+1];
+						routes[i]["employee"] = employees[i];
 						routes[i]["routeDate"] = date;
 						routes[i]["appointmentList"] = [];
 
-						// the starting point is the office
-						routes[i]["appointmentList"].push(aList[0]);
+						// the starting point is the office\
+						for (var j = 0; j < 6; i++) {
+							if(employees[i].team == aList[j].name)
+								routes[i]["appointmentList"].push(aList[j].coord); 
+						};
 						salespersonLocation[i] = 0;
 					}
 
