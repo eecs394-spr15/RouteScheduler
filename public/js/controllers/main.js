@@ -337,11 +337,11 @@ RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope, Appoint
 
 RouteOpt.controller('viewResultsCtrl', function($scope, EmployeesService) {
 	
-	/*
 	$scope.noroute = false;
 	EmployeesServices.getOptimizedSalespersonRoutes().
 		success(function(data, status, headers, config) {
-			if(data.length > 0) {				
+			if(data.length > 0) {
+				console.log(data)
 				$scope.optimizedRoutes = data;
 			} else {
 				$scope.noroute = true;
@@ -350,10 +350,9 @@ RouteOpt.controller('viewResultsCtrl', function($scope, EmployeesService) {
 	}).
 	error(function(data, status, headers, config) {
 	    console.log("an error occurred fetching Appointments")
-	});	
-	*/
+	});
 
-
+	/* sample data
 	$scope.optimizedRoutes = 
 		[ {
 		   	appointmentList: 
@@ -448,6 +447,7 @@ RouteOpt.controller('viewResultsCtrl', function($scope, EmployeesService) {
 		      type: 'Salesperson' }
 		  }
 		  ];
+		 */
 
 
 	$scope.findApptDetails = function(ids){

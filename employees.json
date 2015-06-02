@@ -1,0 +1,131 @@
+
+	{
+	    "name": "Tomaszewski, Thomas D.",
+	    "address": "846 Lum Ave",
+	    "city": "Waterloo",
+	    "state": "WI",
+	    "zip": 53594,
+	    "team": "Green Bay",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 43.19312,
+		"lon": -88.987017
+	    }
+	}
+	{
+	    "name": "Goodine, Sheri L.",
+	    "address": "3821 Patrick Henry Way",
+	    "city": "Middleton",
+	    "state": "WI",
+	    "zip": 53562,
+	    "team": "Madison",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 43.117884,
+		"lon": -89.47049
+	    }
+	}
+	{
+	    "name": "Hockett, Chad A.",
+	    "address": "144 W. Klubertanz Dr.",
+	    "city": "Sun Prairie",
+	    "state": "WI",
+	    "zip": 53590,
+	    "team": "Madison",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 43.194794,
+		"lon": -89.215125
+	    }
+	}
+	{
+	    "name": "Boucher, Bert N.",
+	    "address": "9413 W Waterford Ave",
+	    "city": "Greenfield",
+	    "state": "WI",
+	    "zip": 53228,
+	    "team": "Milwaukee",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 42.969935,
+		"lon": -88.03065
+	    }
+	}
+	{
+	    "name": "Briggs, Kelly P.",
+	    "address": "30938 Pleasant View Dr",
+	    "city": "Waterford",
+	    "state": "WI",
+	    "zip": 53185,
+	    "team": "Milwaukee",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 42.790612,
+		"lon": -88.225471
+	    }
+	}
+	{
+	    "name": "Campbell, Kevin M.",
+	    "address": "336 Llamberris Pass",
+	    "city": "Wales",
+	    "state": "IL",
+	    "zip": 53183,
+	    "team": "Milwaukee",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 43.00961,
+		"lon": -88.369558
+	    }
+	}
+	{
+	    "name": "Marifke, Ryan D.",
+	    "address": "200 Lake Drive",
+	    "city": "South Milwaukee",
+	    "state": "WI",
+	    "zip": 53172,
+	    "team": "Milwaukee",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 42.927957,
+		"lon": -87.851188
+	    }
+	}
+	{
+	    "name": "Peppler, Gary W.",
+	    "address": "216 N. Milwaukee St.",
+	    "city": "Waterford",
+	    "state": "WI",
+	    "zip": 53185,
+	    "team": "Milwaukee",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 42.927957,
+		"lon": -87.851188
+	    }
+	}
+	{
+	    "name": "Sanborn, Bruce J.",
+	    "address": "5636 380th Ave",
+	    "city": "Wheatland",
+	    "state": "WI",
+	    "zip": 53105,
+	    "team": "Milwaukee",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 42.586917,
+		"lon": -88.271328
+	    }
+	}
+	{
+	    "name": "Slaaen, Matthew W.",
+	    "address": "4434 Patzke Rd",
+	    "city": "Racine",
+	    "state": "WI",
+	    "zip": 53405,
+	    "team": "Milwaukee",
+	    "type": "Sales",
+	    "coord": {
+		"lat": 42.761815,
+		"lon": -87.833586
+	    }
+	}
