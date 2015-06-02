@@ -2,9 +2,10 @@ var Employee = require('./models/employee');
 var SalesAppointment = require('./models/salesModel');
 var Geocode = require('./models/geoCoding');
 var OptimizedRoutes = require('./models/route');
+var gm = require('googlemaps');
 
 var EARTH_RADIUS = 6378137.0;
-var geocoder = new google.maps.Geocoder();
+
 
 OptimizedRoutes.find({}, function(err, data) {
 	console.log(data);
@@ -46,7 +47,7 @@ var calculateDistance = function(lat1,lat2,lng1,lng2) {
 }
 
 var codeAddress = function(addr){
-	geocoder.geocode({ 'address': addr}, function(results, status)
+	gm.geocode({ 'address': addr}, function(results, status)
 			{
 				if (status == google.maps.GeocoderStatus.OK)
 				{
