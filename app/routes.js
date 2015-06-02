@@ -136,11 +136,45 @@ module.exports = function(app) {
 					var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
 
 					var count=0;
-					var aList=[{
-						"name":"GreenBay office",
+					var aList=[
+					{
+						"name":"GreenBay",
 						"address":"1125 Tuckaway Ln, Menasha, WI 54952",
 						"coord":{"lat":44.2357938,"lon":-88.4239336}
 					},
+					{
+						"name":"Madison",
+						"address":"3037 S. Stoughton Rd, Madison, WI 53716",
+						"coord":{"lat":43.05324,"lon":-89.307581}
+					},
+					{
+						"name":"Milwaukee",
+						"address":"5801 S. Pennsylvania Ave, Cudahy, WI 53110",
+						"coord":{"lat":42.938382,"lon":-87.882969}
+					},
+					{
+						"name":"Peoria",
+						"address":"1401 West Glen, Peoria, IL 61614",
+						"coord":{"lat":40.74777,"lon":-89.613891}
+					},
+					{
+						"name":"Rockford",
+						"address":"4322 Maray Drive, Rockford, IL 61108",
+						"coord":{"lat":44.2357938,"lon":-89.031492}
+					},
+					{
+						"name":"South",
+						"address":"9932 S. Western Avenue, Chicago, IL 60643",
+						"coord":{"lat":41.71269,"lon":-87.68216}
+					},
+					{
+						"name":"North",
+						"address":"125 E. Oakton, Des Plaines, IL 60018",
+						"coord":{"lat":42.022436,"lon":-87.914881}
+					},
+
+
+
 					{
 				    "name":"Hinkley, Elizabeth A.",
 				    "address":"506 N. Center St",
@@ -204,12 +238,15 @@ module.exports = function(app) {
 					for(var i = 0; i < nSalespeople; i++)
 					{
 						routes[i]={};
-						routes[i]["employee"] = aList[i+1];
+						routes[i]["employee"] = employees[i];
 						routes[i]["routeDate"] = date;
 						routes[i]["appointmentList"] = [];
 
-						// the starting point is the office
-						routes[i]["appointmentList"].push(aList[0]);
+						// the starting point is the office\
+						for (var j = 0; j < 6; i++) {
+							if(employees[i].team == aList[j].name)
+								routes[i]["appointmentList"].push(aList[j].coord); 
+						};
 						salespersonLocation[i] = 0;
 					}
 
