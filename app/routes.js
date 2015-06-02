@@ -5,7 +5,7 @@ var OptimizedRoutes = require('./models/route');
 
 var EARTH_RADIUS = 6378137.0;
 
-OptimizedRoutes.find({}, function(err, data) {
+Geocode.find({}, function(err, data) {
 	console.log(data);
 })
 
@@ -95,6 +95,7 @@ module.exports = function(app) {
 		}, function(err, geocode) {
 			if (err)
 				res.send(err);
+			console.log("create geocode");
 			res.end("successful geocode create");
 		});
 	});
