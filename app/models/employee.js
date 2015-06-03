@@ -7,7 +7,8 @@ var employeeSchema = new mongoose.Schema({
   state: {type: String},
   zip: {type: Number},
   team: {type: String},
-  type: {type: String}
+  type: {type: String},
+  coord:{lat :{ type: Number}, lon :{ type: Number}}
 });
 
 module.exports = mongoose.model('Employee', employeeSchema);
