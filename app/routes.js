@@ -137,9 +137,10 @@ module.exports = function(app) {
 			console.log(appointments);
 			Geocode.find({}, function(err, geocodes)
 			{
-				Employee.find({type: "Salesperson"}, function(err, employees)
+				Employee.find({type: "Sales"}, function(err, employees)
 				{
-					console.log(employees);
+					console.log("employees: ", employees);
+					console.log("geocodes: ", geocodes);
 
 					// add a check right here if the optimized routes are already in the database?
 					// then don't run the algorithm
@@ -155,14 +156,13 @@ module.exports = function(app) {
 					//[[41.77982066,-87.66223627],[41.89893941, -87.61800847],[41.82592984,-87.76200356],[41.98791955,-87.5361794],[41.81677539,-87.64333341],[41.9154257,-87.69469442]]];
 					//var officeAddress=[41.86928379,-87.5629177];
 
-					// assume n salespeople and m customers
 					// the first n rows of the sales
 					// I am using a full distance matrix because im pretty sure thats how a real non-greedy algorithm would work.
 					// and I don't care if it is more inefficient
 
 					var nSalespeople = employees.length;
 					var nAppointments = appointments.length;
-					var nTotal = nSalespeople + nAppointments + 1; // +1 for the office location
+					var nTotal = nSalespeople + nAppointments + 7; // +7 for the office locations
 
 					var count=0;
 					var aList=[
@@ -200,29 +200,6 @@ module.exports = function(app) {
 						"name":"North",
 						"address":"125 E. Oakton, Des Plaines, IL 60018",
 						"coord":{"lat":42.022436,"lon":-87.914881}
-					},
-
-
-
-					{
-				    "name":"Hinkley, Elizabeth A.",
-				    "address":"506 N. Center St",
-				    "city":"Appleton",
-				    "state":"WI",
-				    "zip":54911,
-				    "team":"Green Bay",
-				    "type":"Salesperson",
-				    "coord":{"lat":44.265963,"lon":-88.395845}
-					},
-					{
-				    "name":"Romnek, Michael E.",
-				    "address":"2400 E John St",
-				    "city":"Appleton",
-				    "state":"WI",
-				    "zip":54915,
-				    "team":"Green Bay",
-				    "type":"Salesperson",
-				    "coord":{"lat":44.247456,"lon":-88.370005}
 					}];
 
 					for (i = 0; i < employees.length; i++)
@@ -234,6 +211,7 @@ module.exports = function(app) {
 						{
 							if (geocodes[j]["address"] == address)
 							{
+								found = true;
 								console.log("geocode found for this address");
 								employees[i]["coord"] = geocodes[j]["coord"];
 								aList.push(employees[i]);
@@ -241,6 +219,7 @@ module.exports = function(app) {
 							}
 						}
 						if (!found) {
+							aList.push(employees[i]);
 							console.log("no geocode found for this employee... something is terribly wrong!");
 						}
 					}
@@ -256,9 +235,19 @@ module.exports = function(app) {
 						{
 							if (geocodes[j]["address"] == address)
 							{
+								found = true;
 								console.log("geocode found for this address");
-								appointments[i]["coord"] = geocodes[j]["coord"];
-								aList.push(appointments[i]);
+								console.log(appointments[i]);
+								var newAppt = {};
+								newAppt['coord'] = geocodes[j]['coord'];
+								newAppt['Appt Id'] = appointments[i]['Appt Id'];
+							  newAppt['Start Time'] = appointments[i]['Start Time'];
+							  newAppt['End Time'] = appointments[i]['End Time'];
+							  newAppt['Opportunity #'] = appointments[i]['Opportunity #'];
+							  newAppt['Customer Name'] = appointments[i]['Customer Name'];
+							  newAppt['Job Site'] = appointments[i]['Job Site'];
+								console.log(newAppt);
+								aList.push(newAppt);
 								break;
 							}
 						}
@@ -281,8 +270,9 @@ module.exports = function(app) {
 						routes[i]["routeDate"] = date;
 						routes[i]["appointmentList"] = [];
 
-						// the starting point is the office\
-						for (var j = 0; j < 6; i++) {
+						// the starting point is the office
+						console.log("employee ", i, ": ", employees[i]);
+						for (var j = 0; j < 6; j++) {
 							if(employees[i].team == aList[j].name)
 								routes[i]["appointmentList"].push(aList[j].coord); 
 						};
@@ -314,6 +304,8 @@ module.exports = function(app) {
 						count=0;
 					}
 
+					console.log("alist: ", aList);
+
 					// distance matrix
 					console.log("distance matrix starting");
 
@@ -336,11 +328,19 @@ module.exports = function(app) {
 			  			}
 			  			else
 			  			{
+			  				console.log("alist i: ", i, ": ", aList[i]);
+			  				console.log("alist j: ", j, ": ", aList[j]);
+			  				console.log("alist i coord: ", aList[i]["coord"]);
+			  				if (!aList[i].coord)
+			  				{
+				  				var bleh = JSON.parse(aList[i]);
+									console.log(bleh.coord);
+								}
 			  				// this is where we will call calculateDistance
-			  				var dist = calculateDistance(aList[i]["coord"]["lat"],
-			  																		 aList[j]["coord"]["lat"],
-			  																		 aList[i]["coord"]["lon"],
-			  																		 aList[j]["coord"]["lon"]);
+			  				var dist = calculateDistance(aList[i].coord.lat,
+			  																		 aList[j].coord.lat,
+			  																		 aList[i].coord.lon,
+			  																		 aList[j].coord.lon);
 			  				distanceMatrix[i][j] = dist;
 			  				distanceMatrix[j][i] = dist;
 			  			}
@@ -408,8 +408,9 @@ module.exports = function(app) {
 						});
 					}
 
-				// return json blob of routes
-				res.json(routes);
+					console.log("everything done");
+					console.log(routes);
+					res.json(routes);
 				});
 			});
 		});

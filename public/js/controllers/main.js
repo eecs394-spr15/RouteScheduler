@@ -338,19 +338,20 @@ RouteOpt.controller('viewAppointmentsCtrl', function($scope, $rootScope, Appoint
 RouteOpt.controller('viewResultsCtrl', function($scope, EmployeesService) {
 	
 	$scope.noroute = false;
-	EmployeesServices.getOptimizedSalespersonRoutes().
-		success(function(data, status, headers, config) {
+	EmployeesService.getOptimizedSalespersonRoutes()
+		.success(function(data, status, headers, config) {
 			if(data.length > 0) {
+				console.log("some data");
 				console.log(data)
 				$scope.optimizedRoutes = data;
 			} else {
 				$scope.noroute = true;
+				console.log("no data");
 			}
-			
-	}).
-	error(function(data, status, headers, config) {
-	    console.log("an error occurred fetching Appointments")
-	});
+		})
+		.error(function(data, status, headers, config) {
+		    console.log("an error occurred fetching Appointments")
+		});
 
 	/* sample data
 	$scope.optimizedRoutes = 
