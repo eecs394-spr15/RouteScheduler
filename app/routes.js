@@ -55,7 +55,8 @@ module.exports = function(app) {
 		Employee.create({
 			name : req.body.name,
 			address : req.body.address,
-			type : req.body.type
+			type : req.body.type,
+			team : req.body.team
 		}, function(err, employee) {
 			if (err)
 				res.send(err);
