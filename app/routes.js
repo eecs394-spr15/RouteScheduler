@@ -92,12 +92,12 @@ module.exports = function(app) {
 	    });
 	});
 
- 	app.post('/api/salesAppts', function(req, res) {
-		var d = new Date();
-
-		SalesAppointment.create({
-			Appointments: req.body,
-			ApptDate: (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear()
+	app.post('/api/employees', function(req, res) {
+		Employee.create({
+			name : req.body.name,
+			address : req.body.address,
+			team : req.body.team,
+			type : req.body.type
 		}, function(err, employee) {
 			if (err)
 				res.send(err);

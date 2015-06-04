@@ -61,6 +61,7 @@ RouteOpt.controller('addEmployeeController', function($scope, $window, Employees
 			EmployeesService.create({
 				name: employee.name,
 				address: employee.address,
+				team: employee.team,
 				type: employee.type
 			});
 			$scope.codeAddress(employee.address);

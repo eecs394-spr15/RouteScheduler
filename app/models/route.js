@@ -4,6 +4,7 @@ var routesSchema = new mongoose.Schema({
   employee: {
     name: { type: String},
     address: {type: String},
+    team: {type: String},
     type: {type: String}
   },
   appointmentList: [{   
