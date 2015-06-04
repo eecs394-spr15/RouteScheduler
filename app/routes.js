@@ -92,12 +92,12 @@ module.exports = function(app) {
 	    });
 	});
 
- 	app.post('/api/salesAppts', function(req, res) {
-		var d = new Date();
-
-		SalesAppointment.create({
-			Appointments: req.body,
-			ApptDate: (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear()
+	app.post('/api/employees', function(req, res) {
+		Employee.create({
+			name : req.body.name,
+			address : req.body.address,
+			team : req.body.team,
+			type : req.body.type
 		}, function(err, employee) {
 			if (err)
 				res.send(err);
@@ -272,11 +272,13 @@ module.exports = function(app) {
 
 						// the starting point is the office
 						console.log("employee ", i, ": ", employees[i]);
-						for (var j = 0; j < 6; j++) {
+						for (var j = 0; j < 6; j++)
+						{
 							if(employees[i].team == aList[j].name)
-								routes[i]["appointmentList"].push(aList[j].coord); 
-						};
-						salespersonLocation[i] = 0;
+							{
+								salespersonLocation[i] = j;
+							}
+						}
 					}
 
 					//an array of all man and address & location 
@@ -401,7 +403,6 @@ module.exports = function(app) {
 					// append salesperson home to the route
 					for (var i = 0; i < nSalespeople; i++)
 					{
-						routes[i]["appointmentList"].push(aList[i+1]);
 						OptimizedRoutes.create(routes[i], function(err, employee) {
 							if (err)
 								res.send(err);
