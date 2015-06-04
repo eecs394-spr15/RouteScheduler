@@ -301,6 +301,30 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 					console.log("Error occurred fetching appointments: " + status);
 				});
 		}
+
+		$scope.codeAddress = function(address) {
+			console.log("Calling geocoder...");
+			geocoder.geocode({ 'address': address}, function(results, status)
+			{
+				if (status == google.maps.GeocoderStatus.OK)
+				{
+					console.log("Geocoding success!");
+
+					EmployeesService.postGeocode({
+						'address': address,
+						'coord' : {lat: results[0].geometry.location.A, lon: results[0].geometry.location.F}
+					})
+					.success(function(err){
+						alert("Employee successfully added. Redirecting to employees page.");
+						$window.location.assign("/employees");
+					});
+				}
+				else
+				{
+					alert('Geocode failed because: ' + status);
+				}
+			});
+		}
 	});
 
 
