@@ -92,6 +92,18 @@ module.exports = function(app) {
 	    });
 	});
 
+	app.post('/api/salesAppts', function(req, res) {
+		var d = new Date();
+
+		SalesAppointment.create({
+			Appointments: req.body,
+			ApptDate: (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear()
+		}, function(err, employee) {
+			if (err)
+				res.send(err);
+		});
+	});
+
 	app.post('/api/employees', function(req, res) {
 		Employee.create({
 			name : req.body.name,
