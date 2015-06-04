@@ -67,6 +67,7 @@ module.exports = function(app) {
 		Employee.create({
 			name : req.body.name,
 			address : req.body.address,
+			team : req.body.team,
 			type : req.body.type
 		}, function(err, employee) {
 			if (err)
