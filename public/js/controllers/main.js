@@ -315,8 +315,8 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 						'coord' : {lat: results[0].geometry.location.A, lon: results[0].geometry.location.F}
 					})
 					.success(function(err){
-						alert("Employee successfully added. Redirecting to employees page.");
-						$window.location.assign("/employees");
+						alert("Upload completed successfully. Redirecting to appointments page.");
+						$window.location.assign("/appointments");
 					});
 				}
 				else
