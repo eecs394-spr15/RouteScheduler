@@ -69,7 +69,6 @@ RouteOpt.controller('addEmployeeController', function($scope, $window, Employees
 
 		$scope.remove = function(id) {
 			EmployeesService.delete(id);
-			alert("Employee successfully deleted. Redirecting to employees page.");
 			$window.location.assign("/employees");	
 		}
 
@@ -86,7 +85,6 @@ RouteOpt.controller('addEmployeeController', function($scope, $window, Employees
 						'coord' : {lat: results[0].geometry.location.A, lon: results[0].geometry.location.F}
 					})
 					.success(function(err){
-						alert("Employee successfully added. Redirecting to employees page.");
 						$window.location.assign("/employees");
 					});
 				}

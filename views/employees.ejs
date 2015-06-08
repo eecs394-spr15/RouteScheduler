@@ -7,7 +7,7 @@
       <h1> Employees </h1>
 
       <form action="/manage">
-          <input type="submit" value="Add/Delete Employees">
+          <input type="submit" value="Add/Delete Employees" id='manage-button'>
       </form>
     <ul class="list-group">
       <li class="list-group-item" ng-repeat="stuff in view">
@@ -16,7 +16,7 @@
         <div class="text-muted">{{stuff.type}}</div>
         <div class="text-muted">{{stuff.team}}</div>
         <div class="text-muted">{{stuff.address}}</div>
-        <input ng-click="remove(stuff._id)" type="submit" class="btn btn-default" value="Delete employee by ID">
+        <input ng-click="remove(stuff._id)" type="submit" class="btn btn-default" value="Delete employee by ID" id='delete'>
       </li>
     </ul>
   </div>
