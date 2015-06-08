@@ -183,7 +183,7 @@ RouteOpt.controller('algorithmController', function($scope, $window, EmployeesSe
 
 RouteOpt.controller('uploadController', function($scope, $rootScope, Appointments, EmployeesService) {
 
-	var geocoder = new google.maps.Geocoder();
+	var geocoder;
 	var Locations = [];
 
 	$scope.uploadFile = "";
@@ -227,6 +227,7 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 		  }
 		  var i=0;
 		  var address;
+		  geocoder = new google.maps.Geocoder();
 		  function storeGeo(){
 		  	address=result[i]['Job Site'];	
 		  	i++;	  	
@@ -257,26 +258,6 @@ RouteOpt.controller('uploadController', function($scope, $rootScope, Appointment
 			
 		  }
 		  storeGeo();
-		  /*
-		  for (var i = 0; i < result.length; i++) { 
-		  	var address = result[i]['Job Site'];
-
-		  	// check if we have already geocoded this address
-		  	EmployeesService.getGeocode(address)
-					.success(function(data, status, headers, config) {
-						// if nothing was returned, geocode the address
-						console.log(data);
-						if (!data.length)
-						{
-							console.log("no geocode for this address found in database")
-							setTimeout($scope.codeAddress(address), 200);
-						}
-					})
-					.error(function(data, status, headers, config) {
-					    console.log("an error occurred looking for geocoded address");
-					});	
-		  }
-		  */
 		  
 		  Appointments.addSales(JSON.stringify(result));
 		  console.log("finished parsing");			  
@@ -377,103 +358,6 @@ RouteOpt.controller('viewResultsCtrl', function($scope, EmployeesService) {
 		.error(function(data, status, headers, config) {
 		    console.log("an error occurred fetching Appointments")
 		});
-
-	/* sample data
-	$scope.optimizedRoutes = 
-		[ {
-		   	appointmentList: 
-		    [ 
-		      { 'Appt Id': 764027,
-		        'Start Time': '12:30:00 PM',
-		        'End Time': '3:30:00 PM',
-		        'Opportunity #': 'OPP1285229',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"3705 Meadow Dr, Rolling Meadows, IL , 60008"',
-		      },
-		      { 'Appt Id': 764886,
-		        'Start Time': '3:30:00 PM',
-		        'End Time': '6:30:00 PM',
-		        'Opportunity #': 'OPP1285618',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"85 South St, Cary, IL, 60013"',
-		      },
-		      { 'Appt Id': 764708,
-		        'Start Time': '6:30:00 PM',
-		        'End Time': '9:30:00 PM',
-		        'Opportunity #': 'OPP1285529',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"1508 Robincrest Ln, Lindenhurst, IL, 60046"',
-		   	  },
-			],
-		   	employee: 
-		    { name: 'Hinkley, Elizabeth A.',
-		      address: '506 N. Center St',
-		      type: 'Salesperson' } 
-		  },
-
-		 {
-		   	appointmentList: 
-		    [ 
-		      { 'Appt Id': 764752,
-		        'Start Time': '12:30:00 PM',
-		        'End Time': '3:30:00 PM',
-		        'Opportunity #': 'OPP1285555',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"1214 S Dunton Ave, Arlington Heights, IL , 60005"',
-		      },
-		      { 'Appt Id': 764325,
-		        'Start Time': '3:30:00 PM',
-		        'End Time': '6:30:00 PM',
-		        'Opportunity #': 'OPP1285350',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"13 Westminster Ct, Lake in the Hills, IL, 60156"',
-		      },
-		      { 'Appt Id': 764269,
-		        'Start Time': '6:30:00 PM',
-		        'End Time': '9:30:00 PM',
-		        'Opportunity #': 'OPP1285334',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"1111 Tewes Ln, Zion, IL, 60099"',
-		      },
-		    ],
-		   employee: 
-		    { name: 'Romnek, Michael E.',
-		      address: '2400 E John St',
-		      type: 'Salesperson' } 
-		  },
-		 
-		 { 
-		   appointmentList: 
-		    [ 
-		      { 'Appt Id': 764801,
-		        'Start Time': '12:30:00 PM',
-		        'End Time': '3:30:00 PM',
-		        'Opportunity #': 'OPP1285574',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"9032 Mango Ave, Morton Grove, IL , 60053"',
-		      },
-		      { 'Appt Id': 764440,
-		        'Start Time': '3:30:00 PM',
-		        'End Time': '6:30:00 PM',
-		        'Opportunity #': 'OPP1285384',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"309 N Rohlwing Rd, Palatine, IL, 60074"',
-		      },
-		      { 'Appt Id': 764659,
-		        'Start Time': '6:30:00 PM',
-		        'End Time': '9:30:00 PM',
-		        'Opportunity #': 'OPP1285497',
-		        'Customer Name': 'John Doe',
-		        'Job Site': '"32605 Pilgrims Ct, Lakemoor, IL, 60051"',
-		      },
-		    ],
-		   employee: 
-		    { name: 'Stratton, Erik D.',
-		      address: '4715 Turkey Trail',
-		      type: 'Salesperson' }
-		  }
-		  ];
-		 */
 
 
 	$scope.findApptDetails = function(ids){
