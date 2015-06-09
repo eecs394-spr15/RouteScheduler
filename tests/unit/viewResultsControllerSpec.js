@@ -8,12 +8,47 @@ describe('uploadController', function() {
     $controller = _$controller_;
   }));
 
-  describe('$scope.csvJSON', function() {
-    it('sets the strength to "strong" if the password length is >8 chars', function() {
+  describe('salesperson algorithm', function() {
+    // load the controller before each
+    it('does not assign more than 3 appointments to any salesperson', function() {
       var $scope = {};
-      var controller = $controller('uploadController', { $scope: $scope });
-      $scope.password = 'test';
-      expect($scope.password).toEqual('test');
+      var controller = $controller('AlgorithmUnitTest', { $scope: $scope });
+      var testFailed = false;
+
+      $scope.testAlgorithm();
+
+      for (var i = 0; i < $scope.optimizedRoutes.length; i++) {
+        if ($scope.optimizedRoutes[i].appointmentList.length > 3) {
+          testFailed = true;
+        }
+      }
+
+      expect(testFailed).toBe(false);
+    });
+
+    it('never assigns the same appointment to multiple salespeople', function() {
+      var $scope = {};
+      var controller = $controller('AlgorithmUnitTest', { $scope: $scope });
+      var testFailed = false;
+
+      $scope.testAlgorithm();
+
+      // loop through all appointment combinations
+      for (var i = 0; i < $scope.optimizedRoutes.length; i++) {
+        for (var ii = 0; ii < $scope.optimizedRoutes[i].appointmentList.length; ii++) {
+          for (var j = 0; j < $scope.optimizedRoutes.length; j++) {
+            for (var jj = 0; jj < $scope.optimizedRoutes[j].appointmentList.length; jj++) {
+              if (i != j && ii != jj) {
+                if ($scope.optimizedRoutes[i].appointmentList[ii]['Appt Id'] == $scope.optimizedRoutes[j].appointmentList[jj]['Appt Id']) {
+                  testFailed = true;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      expect(testFailed).toBe(false);
     });
   });
 });
