@@ -607,7 +607,7 @@ RouteOpt.controller('AlgorithmUnitTest', function($scope) {
 				if(count>=nSalespeople)
 				{
 					// notify the user that we don't have enough salespeople
-					console.log("throw an error here, not enough salespeople for the number of appointments");
+					//console.log("throw an error here, not enough salespeople for the number of appointments");
 					break;
 				}
 			}
@@ -686,8 +686,10 @@ RouteOpt.controller('AlgorithmUnitTest', function($scope) {
 					// translate to location in distance matrix
 					var translatedDestIdx = dest + nSalespeople + 1;
 					// get distance from distance matrix
-					distance = distanceMatrix[translatedSalespersonIdx][translatedDestIdx];
-					var time = aList[translatedDestIdx]["Start Time"];
+					var distance = distanceMatrix[translatedSalespersonIdx][translatedDestIdx];
+					var time = aList[translatedSalespersonIdx+7]["Start Time"];
+					
+
 					if (distance < minDistance && !visited[dest] && timeSlot[appointment] == time)
 					{
 						minDistance = distance;
@@ -695,6 +697,7 @@ RouteOpt.controller('AlgorithmUnitTest', function($scope) {
 						bestDest = dest;
 					}
 				}
+				console.log("something went wrong: ", distance);
 
 				if (bestTranslatedDest) {
 					routes[salesperson]["appointmentList"].push(aList[bestTranslatedDest]);
@@ -703,13 +706,17 @@ RouteOpt.controller('AlgorithmUnitTest', function($scope) {
 				}
 				else 
 				{
-					console.log("something went wrong: ", bestDest);
+					//console.log("something went wrong: ", bestTranslatedDest);
 				}
 			}
 		}
 		console.log("routes: ", routes);
 
 		$scope.optimizedRoutes = routes;
+		$scope.nSalespeople = nSalespeople;
+		$scope.nAppointments = nAppointments;
+		$scope.aList = aList;
+		$scope.distanceMatrix = distanceMatrix;
 	}
 
 	var EARTH_RADIUS = 6378137.0;

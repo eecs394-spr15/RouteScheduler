@@ -10,23 +10,21 @@ describe('uploadController', function() {
 
   describe('salesperson algorithm', function() {
     // load the controller before each
-    it('does not assign more than 3 appointments to any salesperson', function() {
+    it('length of aList should equal to the sum of office location, number of sales and number of appointments', function() {
       var $scope = {};
       var controller = $controller('AlgorithmUnitTest', { $scope: $scope });
       var testFailed = false;
 
       $scope.testAlgorithm();
 
-      for (var i = 0; i < $scope.optimizedRoutes.length; i++) {
-        if ($scope.optimizedRoutes[i].appointmentList.length > 3) {
+      if ($scope.aList.length != (7 + $scope.nSalespeople + $scope.nAppointments)) {
           testFailed = true;
-        }
       }
-
       expect(testFailed).toBe(false);
+
     });
 
-    it('never assigns the same appointment to multiple salespeople', function() {
+    it('all of the addresses should have corresponding coordinates', function() {
       var $scope = {};
       var controller = $controller('AlgorithmUnitTest', { $scope: $scope });
       var testFailed = false;
@@ -34,21 +32,35 @@ describe('uploadController', function() {
       $scope.testAlgorithm();
 
       // loop through all appointment combinations
-      for (var i = 0; i < $scope.optimizedRoutes.length; i++) {
-        for (var ii = 0; ii < $scope.optimizedRoutes[i].appointmentList.length; ii++) {
-          for (var j = 0; j < $scope.optimizedRoutes.length; j++) {
-            for (var jj = 0; jj < $scope.optimizedRoutes[j].appointmentList.length; jj++) {
-              if (i != j && ii != jj) {
-                if ($scope.optimizedRoutes[i].appointmentList[ii]['Appt Id'] == $scope.optimizedRoutes[j].appointmentList[jj]['Appt Id']) {
-                  testFailed = true;
-                }
-              }
-            }
-          }
-        }
+      for (var i = 0; i < $scope.aList.length; i++) {
+        if($scope.aList[i].coord.lat == null || $scope.aList[i].coord.lat == null)
+          testFailed = true;
       }
 
       expect(testFailed).toBe(false);
     });
+
+    it('every distance between two locations should not be 0', function() {
+      var $scope = {};
+      var controller = $controller('AlgorithmUnitTest', { $scope: $scope });
+      var testFailed = false;
+
+      $scope.testAlgorithm();
+
+      // loop through all appointment combinations
+      for (var i = 0; i < (7 + $scope.nSalespeople + $scope.nAppointments); i++) {
+        // only half of the matrix is filled
+        for (var j = 0; j <= i; j++)
+        {
+          if (i != j && $scope.distanceMatrix[i][j] == 0)
+          {
+            testFailed = true;
+          }
+        }
+      }
+      expect(testFailed).toBe(false);
+    });
+
+
   });
 });
