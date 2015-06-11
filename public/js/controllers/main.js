@@ -697,7 +697,6 @@ RouteOpt.controller('AlgorithmUnitTest', function($scope) {
 						bestDest = dest;
 					}
 				}
-				console.log("something went wrong: ", distance);
 
 				if (bestTranslatedDest) {
 					routes[salesperson]["appointmentList"].push(aList[bestTranslatedDest]);

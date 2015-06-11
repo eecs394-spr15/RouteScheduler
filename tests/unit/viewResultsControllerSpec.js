@@ -13,37 +13,37 @@ describe('uploadController', function() {
     it('length of aList should equal to the sum of office location, number of sales and number of appointments', function() {
       var $scope = {};
       var controller = $controller('AlgorithmUnitTest', { $scope: $scope });
-      var testFailed = false;
+      var testStatus = true;
 
       $scope.testAlgorithm();
 
       if ($scope.aList.length != (7 + $scope.nSalespeople + $scope.nAppointments)) {
-          testFailed = true;
+          testStatus = false;
       }
-      expect(testFailed).toBe(false);
+      expect(testStatus).toBe(true);
 
     });
 
     it('all of the addresses should have corresponding coordinates', function() {
       var $scope = {};
       var controller = $controller('AlgorithmUnitTest', { $scope: $scope });
-      var testFailed = false;
+      var testStatus = true;
 
       $scope.testAlgorithm();
 
       // loop through all appointment combinations
       for (var i = 0; i < $scope.aList.length; i++) {
         if($scope.aList[i].coord.lat == null || $scope.aList[i].coord.lat == null)
-          testFailed = true;
+          testStatus = false;
       }
 
-      expect(testFailed).toBe(false);
+      expect(testStatus).toBe(true);
     });
 
     it('every distance between two locations should not be 0', function() {
       var $scope = {};
       var controller = $controller('AlgorithmUnitTest', { $scope: $scope });
-      var testFailed = false;
+      var testStatus = true;
 
       $scope.testAlgorithm();
 
@@ -54,11 +54,11 @@ describe('uploadController', function() {
         {
           if (i != j && $scope.distanceMatrix[i][j] == 0)
           {
-            testFailed = true;
+            testStatus = false;
           }
         }
       }
-      expect(testFailed).toBe(false);
+      expect(testStatus).toBe(true);
     });
 
 
