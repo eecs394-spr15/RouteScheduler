@@ -8,12 +8,14 @@ describe('uploadController', function() {
     $controller = _$controller_;
   }));
 
-  describe('$scope.csvJSON', function() {
-    it('sets the strength to "strong" if the password length is >8 chars', function() {
+  describe('geocode',function(){
+    it('gives geocoding result', function(){
       var $scope = {};
-      var controller = $controller('uploadController', { $scope: $scope });
-      $scope.password = 'test';
-      expect($scope.password).toEqual('test');
+      var controller = $controller('addEmployeeController', { $scope: $scope });
+      $scope.geo=$scope.unittest();
+      expect($scope.geo).toBe('333');
     });
   });
+
+  
 });
