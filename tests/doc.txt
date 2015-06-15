@@ -1,0 +1,45 @@
+Unit test:
+
+	Unit test configuration file is: karma.conf.js
+	Unit test codes are in: unit/viewResultsControllerSpec.js
+
+	Test cases:
+		1. check the length of aList - pass
+		2. check coordinates for each location - pass
+		3. check distance - pass
+
+	Result:
+		INFO [karma]: Karma v0.12.36 server started at http://localhost:9876/
+		INFO [launcher]: Starting browser Chrome
+		WARN [web-server]: 404: /favicon.ico
+		INFO [Chrome 43.0.2357 (Mac OS X 10.10.3)]: Connected on socket po9r4_RyAJBUHwvlygSe with id 13932329
+		Chrome 43.0.2357 (Mac OS X 10.10.3): Executed 3 of 3 SUCCESS (0.033 secs / 0.03 secs)
+
+	Issues encountered:
+		Spent a bit more time on initializing karma setup on Chrome.
+
+
+
+
+End to End test:
+
+	Unit test configuration file is: protractor.conf.js
+	Unit test codes are in: e2e/spec.js
+
+	Test cases:
+		1. upload appointment file - pass
+		2. generate routes - pass
+
+	Result:
+		Using the selenium server at http://localhost:4444/wd/hub
+		[launcher] Running 1 instances of WebDriver
+		..
+
+		Finished in 17.087 seconds
+		2 tests, 2 assertions, 0 failures
+
+		[launcher] 0 instance(s) of WebDriver still running
+		[launcher] chrome #1 passed
+
+	Issues encountered:
+		Other than having encountered several coding problems, e.g. how to pass file path in js, others like configuration setup went well.
